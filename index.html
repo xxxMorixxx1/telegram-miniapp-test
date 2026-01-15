@@ -267,26 +267,19 @@
         from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         // ==========================================
-        //  ВСТАВЬ СВОИ ДАННЫЕ НИЖЕ !
+        //  ТВОИ ДАННЫЕ (ВСТАВЛЕНЫ)
         // ==========================================
-        const MY_ADMIN_PASSWORD = "5815"; 
+        const MY_ADMIN_PASSWORD = "123"; // Не забудь сменить пароль если нужно!
 
         const firebaseConfig = {
-            apiKey: "AIzaSyDFrEbOwmtZlWlrPhImDlA0PE1tQKvYNAY",
-            authDomain: "rakstore-a80a8.firebaseapp.com",
-            projectId: "rakstore-a80a8",
-            storageBucket: "rakstore-a80a8.firebasestorage.app",
-            messagingSenderId: "55025016203",
-            appId: "1:55025016203:web:8a6b67666dbb3df285238e"
+             apiKey: "AIzaSyDFrEbOwmtZlWlrPhImDlA0PE1tQKvYNAY",
+             authDomain: "rakstore-a80a8.firebaseapp.com",
+             projectId: "rakstore-a80a8",
+             storageBucket: "rakstore-a80a8.firebasestorage.app",
+             messagingSenderId: "55025016203",
+             appId: "1:55025016203:web:8a6b67666dbb3df285238e"
         };
         // ==========================================
-
-        // ERROR CHECK
-        if(firebaseConfig.apiKey === "API_KEY") {
-            document.getElementById('error-screen').style.display = 'flex';
-            document.getElementById('error-screen').innerHTML = "<h1>ОШИБКА!</h1><p>Вы не вставили API ключи Firebase в код.</p>";
-            throw new Error("No API Key");
-        }
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -324,7 +317,11 @@
                 }
                 document.getElementById('my-ref-id').innerText = myUserId;
 
-            } catch(e) { console.error(e); }
+            } catch(e) { 
+                console.error(e);
+                document.getElementById('error-screen').style.display = 'flex';
+                document.getElementById('error-screen').innerHTML = "Ошибка подключения к базе данных.<br>Проверьте консоль.";
+            }
         }
 
         function renderUI(data) {
