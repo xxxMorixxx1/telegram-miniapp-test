@@ -8,57 +8,67 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        :root { --bg: #1c1c1e; --card: #2c2c2e; --text: #fff; --red: #ff3b30; --green: #30d158; --gray: #8e8e93; }
+        :root { --bg: #1c1c1e; --card: #2c2c2e; --text: #fff; --red: #ff3b30; --green: #30d158; --gray: #8e8e93; --gold: #ffd700; }
         body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding-bottom: 80px; overflow-x: hidden; }
         
-        /* General Styles */
+        /* General */
         header { display: flex; justify-content: space-between; padding: 15px 20px; background: var(--card); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
         .brand { font-size: 24px; font-weight: 900; color: var(--red); text-transform: uppercase; }
         .burger { font-size: 24px; cursor: pointer; }
-
         .page { display: none; padding: 20px; animation: fadeIn 0.3s; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* UI Elements */
+        /* News Banner */
+        .news-banner { background: rgba(255, 59, 48, 0.15); border: 1px solid var(--red); color: #ff8a84; padding: 15px; border-radius: 15px; margin-bottom: 20px; font-size: 14px; display: none; }
+        .news-title { font-weight: bold; margin-bottom: 5px; color: var(--red); }
+
+        /* Level Card */
         .level-card { background: linear-gradient(135deg, #ff3b30, #ff9f0a); padding: 20px; border-radius: 20px; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 15px rgba(255, 59, 48, 0.4); }
         .discount-big { font-size: 48px; font-weight: bold; margin: 10px 0; }
         .xp-bar-bg { background: rgba(0,0,0,0.2); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 10px; }
         .xp-bar-fill { background: white; height: 100%; width: 0%; transition: 1s; }
 
-        .stats-grid { display: flex; justify-content: space-between; margin-bottom: 20px; }
-        .stat-box { background: var(--card); padding: 15px; border-radius: 15px; text-align: center; width: 45%; }
+        /* Catalog Grid */
+        .catalog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .product-card { background: var(--card); border-radius: 15px; overflow: hidden; display: flex; flex-direction: column; }
+        .img-placeholder { width: 100%; height: 100px; background: #3a3a3c; display: flex; align-items: center; justify-content: center; font-size: 30px; color: gray; }
+        .product-info { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; }
+        .product-title { font-weight: bold; font-size: 13px; margin-bottom: 5px; }
+        .product-price { color: var(--green); font-weight: bold; font-size: 14px; margin-bottom: 10px; }
+        .btn-buy { margin-top: auto; background: var(--red); color: white; border: none; padding: 8px; border-radius: 8px; font-size: 12px; width: 100%; cursor: pointer; }
 
-        /* Items List */
+        /* Leaderboard */
+        .leader-item { background: var(--card); padding: 15px; margin-bottom: 10px; border-radius: 15px; display: flex; align-items: center; justify-content: space-between; }
+        .rank-badge { width: 30px; height: 30px; border-radius: 50%; background: #444; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; margin-right: 15px; }
+        .rank-1 { background: var(--gold); color: black; }
+        .rank-2 { background: silver; color: black; }
+        .rank-3 { background: #cd7f32; color: black; }
+
+        /* History Items */
         .warranty-item { background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 10px; border-left: 4px solid var(--green); position: relative; }
         .warranty-item.expired { border-left: 4px solid var(--gray); opacity: 0.7; }
-        .item-header { display: flex; justify-content: space-between; font-weight: bold; font-size: 16px; }
-        .item-dates { font-size: 11px; color: var(--gray); margin-top: 5px; }
-        .item-status { font-size: 12px; margin-top: 5px; font-weight: bold; }
-        .status-active { color: var(--green); }
-        .status-expired { color: var(--red); }
+        .status-active { color: var(--green); font-size: 12px; font-weight: bold; }
+        .status-expired { color: var(--red); font-size: 12px; font-weight: bold; }
         
-        /* Admin Delete Button */
-        .btn-delete { background: #ff453a; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 12px; cursor: pointer; margin-left: 10px; }
-
-        /* Inputs & Admin */
+        /* Inputs */
         input, select { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box; }
         button { width: 100%; padding: 15px; background: var(--red); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .btn-delete { background: #ff453a; width: auto; padding: 5px 10px; margin-left: auto; display: block; }
         .admin-section { border: 1px solid #333; padding: 15px; border-radius: 15px; margin-bottom: 20px; background: rgba(255,255,255,0.02); }
         .hidden { display: none; }
-        
         .flex-row { display: flex; gap: 10px; }
 
-        /* Sidebar & Nav */
+        /* Nav */
         .sidebar { position: fixed; top: 0; right: -80%; width: 70%; height: 100%; background: var(--card); z-index: 200; transition: 0.3s; padding-top: 60px; display: flex; flex-direction: column; }
         .sidebar.active { right: 0; }
         .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 199; }
         .sidebar-item { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; display: flex; gap: 15px; align-items: center; }
         
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--card); display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #333; }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--card); display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #333; z-index: 90; }
         .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: gray; }
         .nav-item.active { color: var(--red); }
-        .nav-item i { font-size: 20px; margin-bottom: 4px; }
+        .nav-item i { font-size: 18px; margin-bottom: 4px; }
     </style>
 </head>
 <body>
@@ -72,32 +82,100 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-item" onclick="toggleSidebar()"><i class="fas fa-times"></i> Закрыть</div>
         <div class="sidebar-item" onclick="navTo('home')"><i class="fas fa-home"></i> Главная</div>
+        <div class="sidebar-item" onclick="navTo('catalog')"><i class="fas fa-store"></i> Магазин</div>
         <div class="sidebar-item" onclick="navTo('history')"><i class="fas fa-shopping-bag"></i> История</div>
         <div class="sidebar-item" onclick="navTo('admin')"><i class="fas fa-user-shield" style="color: var(--red)"></i> Админ Панель</div>
     </div>
 
     <!-- HOME PAGE -->
     <div id="home" class="page active">
+        <!-- News Banner -->
+        <div id="news-block" class="news-banner">
+            <div class="news-title">📢 Новости</div>
+            <div id="news-text">...</div>
+        </div>
+
         <div class="level-card">
             <div>ВАШ УРОВЕНЬ: <span id="lvl-display">1</span></div>
             <div class="discount-big" id="discount-display">5%</div>
             <div class="xp-bar-bg"><div class="xp-bar-fill" id="xp-fill"></div></div>
             <div style="display:flex; justify-content:space-between; margin-top:5px; font-size:12px;">
-                <span id="rub-current">0₽</span> <span id="rub-next">100 000₽</span>
+                <span id="rub-current">0₽</span> <span id="rub-next">100k₽</span>
             </div>
-            <div style="font-size: 10px; opacity: 0.7; margin-top: 5px;">до следующей скидки</div>
+            <div style="font-size: 10px; opacity: 0.7; margin-top: 5px;">потрачено для следующей скидки</div>
         </div>
-        <div class="stats-grid">
-            <div class="stat-box">
-                <div style="font-size:20px; font-weight:bold; color:var(--red)" id="stat-count">0</div>
-                <div style="font-size:12px; color:gray">Активных покупок</div>
-            </div>
-            <div class="stat-box">
-                <div style="font-size:20px; font-weight:bold; color:var(--red)" id="stat-spent">0₽</div>
-                <div style="font-size:12px; color:gray">Потрачено</div>
+
+        <h3>Инструменты</h3>
+        
+        <!-- Promo Code -->
+        <div style="background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 15px;">
+            <label style="font-size:12px; color:gray;">🎁 Промокод</label>
+            <div class="flex-row">
+                <input type="text" id="user-promo-input" placeholder="Введите код" style="margin:0;">
+                <button onclick="activatePromo()" style="width: 40%; padding: 10px;">OK</button>
             </div>
         </div>
-        <p id="loading-text" style="text-align:center; color:gray;">Загрузка...</p>
+
+        <!-- Referral -->
+        <div style="background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 15px;">
+            <label style="font-size:12px; color:gray;">👥 Реферальная система</label>
+            <p style="font-size:12px; margin-top:5px;">Ваш ID для друга: <b style="color:var(--red)" id="my-ref-id">...</b></p>
+            <p style="font-size:10px; color:gray">Друг получит бонус, когда вы что-то купите.</p>
+            
+            <div id="ref-input-block" style="margin-top:10px;">
+                <input type="number" id="referrer-input" placeholder="ID кто вас пригласил">
+                <button onclick="setReferrer()" style="padding:10px; background:#333;">Сохранить пригласителя</button>
+            </div>
+            <p id="ref-status" style="font-size:12px; color:var(--green); display:none;">Вы приглашены пользователем <span id="ref-who"></span></p>
+        </div>
+    </div>
+
+    <!-- CATALOG PAGE -->
+    <div id="catalog" class="page">
+        <h2>Магазин</h2>
+        <div class="catalog-grid">
+            <!-- Items -->
+            <div class="product-card">
+                <div class="img-placeholder"><i class="fab fa-spotify"></i></div>
+                <div class="product-info">
+                    <div class="product-title">Spotify Premium</div>
+                    <div class="product-price">299₽ / мес</div>
+                    <button class="btn-buy" onclick="buyItem('Spotify Premium')">Купить</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="img-placeholder"><i class="fab fa-youtube"></i></div>
+                <div class="product-info">
+                    <div class="product-title">YouTube Premium</div>
+                    <div class="product-price">199₽ / мес</div>
+                    <button class="btn-buy" onclick="buyItem('YouTube Premium')">Купить</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="img-placeholder"><i class="fas fa-film"></i></div>
+                <div class="product-info">
+                    <div class="product-title">Netflix 4K</div>
+                    <div class="product-price">450₽ / мес</div>
+                    <button class="btn-buy" onclick="buyItem('Netflix 4K')">Купить</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="img-placeholder"><i class="fas fa-shield-alt"></i></div>
+                <div class="product-info">
+                    <div class="product-title">VPN (1 год)</div>
+                    <div class="product-price">1200₽</div>
+                    <button class="btn-buy" onclick="buyItem('VPN Year')">Купить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LEADERBOARD PAGE -->
+    <div id="leaderboard" class="page">
+        <h2>🏆 Топ мажоров</h2>
+        <div id="leaderboard-list">
+            <p style="text-align:center; color:gray">Загрузка...</p>
+        </div>
     </div>
 
     <!-- HISTORY PAGE -->
@@ -110,69 +188,74 @@
     <div id="admin" class="page">
         <h2 style="color: var(--red)">Админ Панель</h2>
         
-        <!-- Login Screen -->
         <div id="admin-login">
-            <p>Введите пароль для доступа:</p>
             <input type="password" id="adm-password-input" placeholder="Пароль">
             <button onclick="adminLogin()">Войти</button>
         </div>
 
-        <!-- Controls (Hidden by default) -->
         <div id="admin-controls" class="hidden">
             
-            <!-- 1. ISSUE ITEM -->
+            <!-- News -->
             <div class="admin-section">
-                <h3><i class="fas fa-plus-circle"></i> Выдать товар</h3>
-                <label>Кому (@username):</label>
-                <input type="text" id="adm-username" placeholder="Пример: durov">
-                
-                <label>Товар и Цена:</label>
-                <input type="text" id="adm-item" placeholder="Название (Spotify)">
-                <input type="number" id="adm-price" placeholder="Цена (RUB)">
-                
-                <label>Гарантия:</label>
+                <h3>📣 Новости</h3>
+                <input type="text" id="adm-news-text" placeholder="Текст новости">
+                <button onclick="adminSetNews()" style="background:#333">Обновить баннер</button>
+            </div>
+
+            <!-- Promo -->
+            <div class="admin-section">
+                <h3>🎁 Создать Промокод</h3>
+                <input type="text" id="adm-promo-code" placeholder="Код (например NEWYEAR)">
+                <input type="number" id="adm-promo-val" placeholder="Сумма (XP/Руб)">
+                <button onclick="adminCreatePromo()" style="background:#333">Создать код</button>
+            </div>
+
+            <!-- Issue Item -->
+            <div class="admin-section">
+                <h3>🛒 Выдать товар</h3>
+                <label>Юзернейм (@username):</label>
+                <input type="text" id="adm-username" placeholder="durov">
+                <input type="text" id="adm-item" placeholder="Товар">
+                <input type="number" id="adm-price" placeholder="Цена">
                 <div class="flex-row">
-                    <input type="number" id="adm-duration" placeholder="Срок" style="width: 40%;">
-                    <select id="adm-unit" style="width: 60%;">
-                        <option value="hours">Часов</option>
-                        <option value="days" selected>Дней</option>
+                    <input type="number" id="adm-duration" placeholder="Срок">
+                    <select id="adm-unit">
+                        <option value="days">Дней</option>
                         <option value="months">Месяцев</option>
                         <option value="years">Лет</option>
                     </select>
                 </div>
-                
-                <button onclick="adminGiveItem()">Выдать и сохранить</button>
+                <button onclick="adminGiveItem()">Выдать</button>
             </div>
 
-            <!-- 2. MANAGE USERS -->
+            <!-- Delete -->
             <div class="admin-section">
-                <h3><i class="fas fa-search"></i> Управление / Удаление</h3>
-                <p style="font-size:12px; color:gray">Найти пользователя чтобы удалить покупки</p>
-                <input type="text" id="adm-search-user" placeholder="Введите username (без @)">
-                <button onclick="adminFindUser()" style="background: #333; margin-bottom: 10px;">Найти пользователя</button>
-                
-                <div id="adm-user-items" style="margin-top: 15px;"></div>
+                <h3>❌ Удаление</h3>
+                <input type="text" id="adm-search-user" placeholder="Поиск username">
+                <button onclick="adminFindUser()" style="background:#333">Найти</button>
+                <div id="adm-user-items" style="margin-top:10px"></div>
             </div>
-
-            <button onclick="location.reload()" style="background: #333; margin-top:20px;">Выйти</button>
         </div>
     </div>
 
     <nav class="bottom-nav">
         <div class="nav-item active" onclick="navTo('home')"><i class="fas fa-home"></i>Главная</div>
+        <div class="nav-item" onclick="navTo('catalog')"><i class="fas fa-store"></i>Витрина</div>
+        <div class="nav-item" onclick="navTo('leaderboard')"><i class="fas fa-trophy"></i>Топ</div>
         <div class="nav-item" onclick="navTo('history')"><i class="fas fa-shopping-bag"></i>Покупки</div>
     </nav>
 
     <!-- FIREBASE & LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, increment, collection, query, where, getDocs } 
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, increment, collection, query, where, getDocs, orderBy, limit } 
         from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         // ==========================================
-        //  НАСТРОЙКИ (ВНЕСИ СВОИ ДАННЫЕ)
+        //  НАСТРОЙКИ
         // ==========================================
-        const MY_ADMIN_PASSWORD = "5815"; // <--- ТВОЙ ПАРОЛЬ
+        const MY_ADMIN_PASSWORD = "5815";  // <-- Пароль админа
+        const ADMIN_TG_USERNAME = "d2f4lt"; // <-- Твой ник в ТГ (без @) для кнопки "Купить"
         
         const firebaseConfig = {
             apiKey: "AIzaSyDFrEbOwmtZlWlrPhImDlA0PE1tQKvYNAY",
@@ -189,37 +272,38 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        let myUserId = tg.initDataUnsafe?.user?.id || 11111; 
+        let myUserId = tg.initDataUnsafe?.user?.id || 11111;
         let myUsername = tg.initDataUnsafe?.user?.username || "unknown";
-        let myName = tg.initDataUnsafe?.user?.first_name || "Guest";
         if(myUsername) myUsername = myUsername.toLowerCase();
+        let myName = tg.initDataUnsafe?.user?.first_name || "Guest";
 
-        // --- 1. LOGIN & INIT ---
-
-        async function loadUser() {
+        // --- INIT ---
+        async function init() {
+            // Load User
             const userRef = doc(db, "users", myUserId.toString());
             const userSnap = await getDoc(userRef);
 
             if (userSnap.exists()) {
-                if (userSnap.data().username !== myUsername) {
-                    updateDoc(userRef, { username: myUsername });
-                }
+                if(userSnap.data().username !== myUsername) updateDoc(userRef, { username: myUsername });
                 renderUI(userSnap.data());
             } else {
-                const newUser = { 
-                    name: myName, 
-                    username: myUsername, 
-                    spent: 0, 
-                    items: [] 
-                };
+                const newUser = { name: myName, username: myUsername, spent: 0, items: [] };
                 await setDoc(userRef, newUser);
                 renderUI(newUser);
             }
-            document.getElementById('loading-text').style.display = 'none';
+
+            // Load News
+            const newsSnap = await getDoc(doc(db, "settings", "general"));
+            if(newsSnap.exists() && newsSnap.data().news) {
+                document.getElementById('news-block').style.display = 'block';
+                document.getElementById('news-text').innerText = newsSnap.data().news;
+            }
+
+            document.getElementById('my-ref-id').innerText = myUserId;
         }
 
         function renderUI(data) {
-            // Level Logic
+            // Stats & Level
             const RUB_PER_LEVEL = 100000;
             let spent = data.spent || 0;
             let level = Math.floor(spent / RUB_PER_LEVEL) + 1;
@@ -231,212 +315,241 @@
             document.getElementById('discount-display').innerText = discount + "%";
             document.getElementById('xp-fill').style.width = percent + "%";
             document.getElementById('rub-current').innerText = currentLevelProgress.toLocaleString() + "₽";
-            document.getElementById('rub-next').innerText = RUB_PER_LEVEL.toLocaleString() + "₽";
-            document.getElementById('stat-spent').innerText = spent.toLocaleString() + "₽";
 
-            // Items Rendering
+            // Referral Status
+            if(data.referrerId) {
+                document.getElementById('ref-input-block').style.display = 'none';
+                document.getElementById('ref-status').style.display = 'block';
+                document.getElementById('ref-who').innerText = data.referrerId;
+            }
+
+            // History
             const list = document.getElementById('history-list');
             list.innerHTML = "";
-            let activeCount = 0;
-
             if(data.items && data.items.length > 0) {
-                // Sort by purchase date (newest first)
-                const sortedItems = [...data.items].sort((a,b) => new Date(b.date) - new Date(a.date));
-                
-                sortedItems.forEach(item => {
+                const sorted = [...data.items].sort((a,b) => new Date(b.date) - new Date(a.date));
+                sorted.forEach(item => {
                     const now = new Date();
                     const expire = new Date(item.expiryDate);
                     const isExpired = now > expire;
-                    if(!isExpired) activeCount++;
-
-                    // Format Dates
-                    const dateBought = new Date(item.date).toLocaleDateString();
-                    const dateExpire = expire.toLocaleDateString();
-
                     list.innerHTML += `
                     <div class="warranty-item ${isExpired ? 'expired' : ''}">
-                        <div class="item-header">
-                            <span>${item.name}</span>
-                            <span>${item.price}₽</span>
+                        <div style="display:flex; justify-content:space-between">
+                            <b>${item.name}</b> <span>${item.price}₽</span>
                         </div>
-                        <div class="item-status ${isExpired ? 'status-expired' : 'status-active'}">
-                            ${isExpired ? '<i class="fas fa-times-circle"></i> Истекла' : '<i class="fas fa-check-circle"></i> Активна'}
-                        </div>
-                        <div class="item-dates">
-                            <div>Выдана: ${dateBought}</div>
-                            <div>Истекает: ${dateExpire}</div>
+                        <div class="${isExpired ? 'status-expired' : 'status-active'}">
+                            ${isExpired ? 'Истекла' : 'Активна до ' + expire.toLocaleDateString()}
                         </div>
                     </div>`;
                 });
             } else {
-                list.innerHTML = "<p style='text-align:center; color:gray'>Покупок нет</p>";
+                list.innerHTML = "<p style='text-align:center; color:gray'>Пусто</p>";
             }
-            document.getElementById('stat-count').innerText = activeCount;
         }
 
-        // --- 2. ADMIN FUNCTIONS ---
+        // --- CLIENT FUNCTIONS ---
+        
+        window.buyItem = (name) => {
+            const text = `Привет! Хочу купить ${name}. Мой ID: ${myUserId}`;
+            tg.openTelegramLink(`https://t.me/${ADMIN_TG_USERNAME}?text=${encodeURIComponent(text)}`);
+        }
 
-        // Login
+        window.activatePromo = async () => {
+            const code = document.getElementById('user-promo-input').value.trim().toUpperCase();
+            if(!code) return;
+            
+            try {
+                const promoRef = doc(db, "promocodes", code);
+                const promoSnap = await getDoc(promoRef);
+
+                if(!promoSnap.exists()) return alert("Код не найден");
+                const promoData = promoSnap.data();
+                
+                if(promoData.usedBy && promoData.usedBy.includes(myUserId.toString())) return alert("Вы уже использовали этот код");
+
+                // Transaction
+                await updateDoc(promoRef, { usedBy: arrayUnion(myUserId.toString()) });
+                await updateDoc(doc(db, "users", myUserId.toString()), { spent: increment(promoData.value) });
+                
+                alert(`Код активирован! +${promoData.value}₽ к опыту.`);
+                location.reload();
+            } catch(e) { console.error(e); alert("Ошибка активации"); }
+        }
+
+        window.setReferrer = async () => {
+            const refId = document.getElementById('referrer-input').value;
+            if(!refId || refId == myUserId) return alert("Некорректный ID");
+            
+            try {
+                // Check if user exists
+                const refUserSnap = await getDoc(doc(db, "users", refId.toString()));
+                if(!refUserSnap.exists()) return alert("Пользователь с таким ID не найден");
+
+                await updateDoc(doc(db, "users", myUserId.toString()), { referrerId: refId.toString() });
+                alert("Пригласитель сохранен!");
+                location.reload();
+            } catch(e) { console.error(e); alert("Ошибка"); }
+        }
+
+        // --- LEADERBOARD ---
+        window.loadLeaderboard = async () => {
+            const list = document.getElementById('leaderboard-list');
+            // Fetch top 10 by spent
+            // Note: Requires Firestore Index. If fail, create index in console link.
+            try {
+                const q = query(collection(db, "users"), orderBy("spent", "desc"), limit(10));
+                const snap = await getDocs(q);
+                list.innerHTML = "";
+                
+                let rank = 1;
+                snap.forEach(doc => {
+                    const u = doc.data();
+                    let badgeClass = rank === 1 ? 'rank-1' : (rank === 2 ? 'rank-2' : (rank === 3 ? 'rank-3' : ''));
+                    list.innerHTML += `
+                    <div class="leader-item">
+                        <div style="display:flex; align-items:center">
+                            <div class="rank-badge ${badgeClass}">${rank}</div>
+                            <b>${u.name || 'User'}</b>
+                        </div>
+                        <span style="color:var(--gold)">${u.spent || 0}₽</span>
+                    </div>`;
+                    rank++;
+                });
+            } catch(e) { 
+                console.error(e); 
+                list.innerHTML = "<p style='color:red; font-size:12px'>Требуется индекс Firestore (см. консоль)</p>";
+            }
+        }
+
+        // --- ADMIN ---
+
         window.adminLogin = () => {
-            const input = document.getElementById('adm-password-input').value;
-            if(input === MY_ADMIN_PASSWORD) {
+            if(document.getElementById('adm-password-input').value === MY_ADMIN_PASSWORD) {
                 document.getElementById('admin-login').style.display = 'none';
                 document.getElementById('admin-controls').classList.remove('hidden');
-            } else {
-                alert("Неверный пароль");
-            }
+            } else alert("Неверно");
         }
 
-        // Give Item
+        window.adminSetNews = async () => {
+            const txt = document.getElementById('adm-news-text').value;
+            await setDoc(doc(db, "settings", "general"), { news: txt }, { merge: true });
+            alert("Новости обновлены");
+        }
+
+        window.adminCreatePromo = async () => {
+            const code = document.getElementById('adm-promo-code').value.toUpperCase();
+            const val = parseInt(document.getElementById('adm-promo-val').value);
+            if(!code || !val) return;
+            await setDoc(doc(db, "promocodes", code), { value: val, usedBy: [] });
+            alert(`Промокод ${code} на ${val}₽ создан!`);
+        }
+
         window.adminGiveItem = async () => {
-            let targetUser = document.getElementById('adm-username').value.trim().replace("@", "").toLowerCase();
+            let uname = document.getElementById('adm-username').value.trim().replace("@","").toLowerCase();
             let name = document.getElementById('adm-item').value;
             let price = parseInt(document.getElementById('adm-price').value);
             let duration = parseInt(document.getElementById('adm-duration').value);
             let unit = document.getElementById('adm-unit').value;
 
-            if(!targetUser || !name || !price || !duration) return alert("Заполните все поля");
+            if(!uname || !name) return alert("Заполните поля");
 
-            // Calculate Expiry
-            let expiryDate = new Date();
-            if(unit === 'hours') expiryDate.setHours(expiryDate.getHours() + duration);
-            if(unit === 'days') expiryDate.setDate(expiryDate.getDate() + duration);
-            if(unit === 'months') expiryDate.setMonth(expiryDate.getMonth() + duration);
-            if(unit === 'years') expiryDate.setFullYear(expiryDate.getFullYear() + duration);
+            let expDate = new Date();
+            if(unit === 'days') expDate.setDate(expDate.getDate() + duration);
+            if(unit === 'months') expDate.setMonth(expDate.getMonth() + duration);
+            if(unit === 'years') expDate.setFullYear(expDate.getFullYear() + duration);
 
             try {
-                const usersRef = collection(db, "users");
-                const q = query(usersRef, where("username", "==", targetUser));
-                const querySnapshot = await getDocs(q);
-
-                if (querySnapshot.empty) return alert("Пользователь не найден");
-
-                let userDoc = querySnapshot.docs[0];
+                const q = query(collection(db, "users"), where("username", "==", uname));
+                const snap = await getDocs(q);
+                if(snap.empty) return alert("Юзер не найден");
                 
-                // ГЕНЕРАЦИЯ УНИКАЛЬНОГО ID (Исправлено)
-                // Добавляем случайное число, чтобы ID были уникальны даже при быстром добавлении
-                const uniqueId = Date.now().toString() + Math.random().toString(36).substr(2, 9);
+                const userDoc = snap.docs[0];
+                const userId = userDoc.id;
+                const userData = userDoc.data();
 
                 const newItem = {
-                    id: uniqueId, 
-                    name,
-                    price,
+                    id: Date.now().toString() + Math.random().toString(36).substr(2,5),
+                    name, price,
                     date: new Date().toISOString(),
-                    expiryDate: expiryDate.toISOString(),
-                    warrantyLabel: `${duration} ${unit}`
+                    expiryDate: expDate.toISOString()
                 };
 
-                await updateDoc(doc(db, "users", userDoc.id), {
+                // 1. Give Item
+                await updateDoc(doc(db, "users", userId), {
                     items: arrayUnion(newItem),
                     spent: increment(price)
                 });
 
-                alert("Товар выдан!");
-                document.getElementById('adm-item').value = "";
-                if(userDoc.id == myUserId.toString()) loadUser();
+                // 2. Referral Bonus (10%)
+                if(userData.referrerId) {
+                    const bonus = Math.floor(price * 0.1);
+                    const refRef = doc(db, "users", userData.referrerId);
+                    // Check if referrer exists to avoid error
+                    const checkRef = await getDoc(refRef);
+                    if(checkRef.exists()) {
+                        await updateDoc(refRef, { spent: increment(bonus) });
+                        console.log(`Referral bonus ${bonus} sent to ${userData.referrerId}`);
+                    }
+                }
 
-            } catch(e) { console.error(e); alert("Ошибка базы данных"); }
+                alert("Выдано + Реферальные начислены!");
+            } catch(e) { console.error(e); alert("Ошибка"); }
         }
 
-        // Find User
         window.adminFindUser = async () => {
-            let targetUser = document.getElementById('adm-search-user').value.trim().replace("@", "").toLowerCase();
-            const container = document.getElementById('adm-user-items');
-            container.innerHTML = "Поиск...";
+            let uname = document.getElementById('adm-search-user').value.trim().replace("@","").toLowerCase();
+            const box = document.getElementById('adm-user-items');
+            box.innerHTML = "Поиск...";
+            
+            const q = query(collection(db, "users"), where("username", "==", uname));
+            const snap = await getDocs(q);
+            if(snap.empty) return box.innerHTML = "Нет такого";
 
-            try {
-                const usersRef = collection(db, "users");
-                const q = query(usersRef, where("username", "==", targetUser));
-                const querySnapshot = await getDocs(q);
-
-                if (querySnapshot.empty) {
-                    container.innerHTML = "<span style='color:red'>Пользователь не найден</span>";
-                    return;
-                }
-
-                let userDoc = querySnapshot.docs[0];
-                let userData = userDoc.data();
-                let userId = userDoc.id;
-
-                if (!userData.items || userData.items.length === 0) {
-                    container.innerHTML = "У пользователя нет покупок.";
-                    return;
-                }
-
-                let html = `<p>Покупки пользователя <b>${userData.name}</b>:</p>`;
-                
-                // Рендерим список с кнопкой удаления
-                // Важно: передаем ID товара как строку
-                userData.items.forEach((item) => {
-                    html += `
-                    <div style="background: #222; padding: 10px; margin-bottom: 5px; border-radius: 5px; display:flex; justify-content:space-between; align-items:center;">
-                        <div>
-                            <b>${item.name}</b> (${item.price}₽)<br>
-                            <span style="font-size:10px; color:gray">До: ${new Date(item.expiryDate).toLocaleDateString()}</span>
-                        </div>
-                        <button class="btn-delete" onclick="adminDeleteItem('${userId}', '${item.id}', ${item.price})">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>`;
-                });
-                container.innerHTML = html;
-
-            } catch(e) { console.error(e); }
+            const u = snap.docs[0].data();
+            const uid = snap.docs[0].id;
+            
+            box.innerHTML = "";
+            u.items.forEach(i => {
+                box.innerHTML += `
+                <div style="background:#222; padding:5px; margin:5px 0; display:flex; justify-content:space-between">
+                    <span>${i.name}</span>
+                    <button class="btn-delete" onclick="delItem('${uid}', '${i.id}', ${i.price})">🗑</button>
+                </div>`;
+            });
+            if(!u.items || u.items.length === 0) box.innerHTML = "Нет покупок";
         }
 
-        // УДАЛЕНИЕ (ИСПРАВЛЕННАЯ ФУНКЦИЯ)
-        window.adminDeleteItem = async (userId, itemId, itemPrice) => {
-            if(!confirm("Удалить эту покупку? Сумма потраченного уменьшится.")) return;
-
-            try {
-                const userRef = doc(db, "users", userId);
-                const userSnap = await getDoc(userRef);
-                const userData = userSnap.data();
-
-                // Преобразуем цену в число, чтобы точно сработало вычитание
-                const priceToDeduct = Number(itemPrice);
-
-                // ИСПРАВЛЕННАЯ ЛОГИКА УДАЛЕНИЯ:
-                // Мы ищем индекс элемента с нужным ID и удаляем ровно ОДИН элемент
-                const index = userData.items.findIndex(i => String(i.id) === String(itemId));
-                
-                if (index > -1) {
-                    // Удаляем 1 элемент по индексу
-                    userData.items.splice(index, 1);
-                    
-                    // Обновляем базу: перезаписываем массив и вычитаем сумму
-                    await updateDoc(userRef, {
-                        items: userData.items,
-                        spent: increment(-priceToDeduct) 
-                    });
-
-                    alert("Покупка удалена корректно!");
-                    document.getElementById('adm-user-items').innerHTML = "Список обновляется..."; 
-                    
-                    // Обновляем интерфейс (если удалили у себя)
-                    if(userId == myUserId.toString()) loadUser(); 
-                } else {
-                    alert("Ошибка: Товар не найден (возможно уже удален).");
-                }
-
-            } catch(e) { console.error(e); alert("Ошибка удаления"); }
+        window.delItem = async (uid, itemId, price) => {
+            if(!confirm("Удалить?")) return;
+            const ref = doc(db, "users", uid);
+            const snap = await getDoc(ref);
+            const items = snap.data().items;
+            const idx = items.findIndex(x => x.id === itemId);
+            if(idx > -1) {
+                items.splice(idx, 1);
+                await updateDoc(ref, { items: items, spent: increment(-price) });
+                alert("Удалено");
+                document.getElementById('adm-user-items').innerHTML = "Обновлено";
+            }
         }
 
-        // Init
-        loadUser();
-
-        // Nav Logic
+        // Nav
+        window.navTo = (id) => {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            // simple nav highlight logic omitted for brevity
+            document.getElementById('sidebar').classList.remove('active');
+            document.querySelector('.sidebar-overlay').style.display = 'none';
+            if(id === 'leaderboard') loadLeaderboard();
+        }
         window.toggleSidebar = () => {
             document.getElementById('sidebar').classList.toggle('active');
             let ov = document.querySelector('.sidebar-overlay');
             ov.style.display = ov.style.display === 'block' ? 'none' : 'block';
         }
-        window.navTo = (id) => {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.getElementById('sidebar').classList.remove('active');
-            document.querySelector('.sidebar-overlay').style.display = 'none';
-        }
+
+        init();
     </script>
 </body>
 </html>
