@@ -11,30 +11,32 @@
         :root { --bg: #1c1c1e; --card: #2c2c2e; --text: #fff; --red: #ff3b30; --green: #30d158; --gray: #8e8e93; --gold: #ffd700; }
         body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding-bottom: 80px; overflow-x: hidden; transition: background 0.5s; }
         
-        /* --- SEASONAL MODES CSS --- */
-        /* Snow (New Year) */
-        .snow-flake { position: fixed; color: white; top: -10px; animation: fall linear infinite; z-index: 50; pointer-events: none; opacity: 0.8; }
-        @keyframes fall { to { transform: translateY(105vh); } }
+        /* SEASONAL EFFECTS */
+        #seasonal-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; overflow: hidden; }
         
+        /* Snow */
+        .snow-flake { position: absolute; color: white; top: -20px; animation: fall linear infinite; opacity: 0.8; }
+        @keyframes fall { to { transform: translateY(110vh); } }
+
         /* Halloween */
-        body.mode-halloween { background: #1a0500; --red: #ff6600; --card: #2d1405; }
-        .ghost { position: fixed; color: rgba(255,255,255,0.1); animation: floatGhost 10s infinite linear; z-index: 1; pointer-events: none; font-size: 40px; }
-        @keyframes floatGhost { 0% { transform: translate(-10vw, 100vh); } 100% { transform: translate(110vw, -10vh); } }
+        body.mode-halloween { background: #240a00; --red: #ff6600; }
+        .ghost { position: absolute; font-size: 30px; opacity: 0.3; animation: floatGhost 15s linear infinite; }
+        @keyframes floatGhost { 0% { transform: translate(-10vw, 110vh); } 100% { transform: translate(110vw, -10vh); } }
 
         /* Autumn */
         body.mode-autumn { background: #1a1000; --green: #d48806; }
-        .leaf { position: fixed; color: #d48806; animation: fallRotate 8s linear infinite; z-index: 50; pointer-events: none; }
-        @keyframes fallRotate { 0% { transform: translateY(-10vh) rotate(0deg); } 100% { transform: translateY(105vh) rotate(360deg); } }
+        .leaf { position: absolute; color: #d48806; animation: fallRotate 8s linear infinite; font-size: 20px; }
+        @keyframes fallRotate { 0% { transform: translateY(-10vh) rotate(0deg); } 100% { transform: translateY(110vh) rotate(360deg); } }
 
         /* Summer */
         body.mode-summer { background: #001a1a; --red: #ffcc00; }
-        .sun-flare { position: fixed; top: -50px; right: -50px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,204,0,0.4) 0%, rgba(0,0,0,0) 70%); z-index: 0; pointer-events: none; }
+        .sun-flare { position: absolute; top: -100px; right: -100px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,204,0,0.3) 0%, rgba(0,0,0,0) 70%); }
 
         /* Spring */
         body.mode-spring { background: #0f1a15; --red: #ff69b4; }
-        .flower { position: fixed; color: #ff69b4; animation: fall 12s linear infinite; z-index: 50; pointer-events: none; font-size: 10px; }
+        .flower { position: absolute; color: #ff69b4; animation: fall 10s linear infinite; font-size: 14px; }
 
-        /* --- UI ELEMENTS --- */
+        /* UI */
         header { display: flex; justify-content: space-between; padding: 15px 20px; background: var(--card); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
         .brand { font-size: 24px; font-weight: 900; color: var(--red); text-transform: uppercase; }
         .burger { font-size: 24px; cursor: pointer; }
@@ -43,12 +45,10 @@
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Admin Tabs */
         .admin-tabs { display: flex; gap: 10px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
         .admin-tab { background: #333; padding: 8px 15px; border-radius: 20px; font-size: 12px; white-space: nowrap; cursor: pointer; }
         .admin-tab.active { background: var(--red); color: white; }
 
-        /* Cards */
         .level-card { background: linear-gradient(135deg, var(--red), #ff9f0a); padding: 20px; border-radius: 20px; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 15px rgba(255, 59, 48, 0.4); }
         .xp-bar-bg { background: rgba(0,0,0,0.2); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 10px; }
         .xp-bar-fill { background: white; height: 100%; width: 0%; transition: 1s; }
@@ -56,8 +56,7 @@
         .bonus-card { background: #333; padding: 15px; border-radius: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--gold); }
         .bonus-val { color: var(--gold); font-size: 24px; font-weight: bold; }
 
-        /* Lists */
-        .trans-item { background: var(--card); padding: 10px; margin-bottom: 8px; border-radius: 10px; display: flex; justify-content: space-between; font-size: 13px; border-left: 3px solid #555; }
+        .trans-item { background: var(--card); padding: 10px; margin-bottom: 8px; border-radius: 10px; display: flex; justify-content: space-between; font-size: 12px; border-left: 3px solid #555; }
         .trans-plus { border-left-color: var(--green); }
         .trans-minus { border-left-color: var(--red); }
         
@@ -74,24 +73,25 @@
         .btn-icon { background: #444; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 5px; margin-left: 5px; cursor: pointer; }
         .btn-red { background: #ff453a; }
 
-        /* Nav */
         .sidebar { position: fixed; top: 0; right: -80%; width: 70%; height: 100%; background: var(--card); z-index: 200; transition: 0.3s; padding-top: 60px; display: flex; flex-direction: column; }
         .sidebar.active { right: 0; }
         .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 199; }
         .sidebar-item { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; display: flex; gap: 15px; align-items: center; }
         
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--card); display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #333; z-index: 90; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: gray; transition: 0.2s; cursor: pointer; width: 25%; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: gray; transition: 0.2s; cursor: pointer; width: 33%; }
         .nav-item.active { color: var(--red); }
         .nav-item i { font-size: 18px; margin-bottom: 4px; }
         
-        /* Modal */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 300; align-items: center; justify-content: center; padding: 20px; }
         .modal-content { background: var(--card); padding: 20px; border-radius: 15px; width: 100%; max-width: 350px; }
+        
+        #error-screen { position: fixed; inset:0; background: #000; color: red; z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; text-align: center; display: none; }
     </style>
 </head>
 <body>
-    <div id="seasonal-container"></div> <!-- Контейнер для эффектов -->
+    <div id="error-screen"></div>
+    <div id="seasonal-container"></div>
 
     <header>
         <div class="brand">RakStore</div>
@@ -108,7 +108,6 @@
 
     <!-- 1. HOME -->
     <div id="home" class="page active">
-        <!-- News -->
         <div id="news-block" style="background:rgba(255,59,48,0.1); padding:15px; border-radius:15px; margin-bottom:20px; display:none; border:1px solid var(--red);">
             <div style="font-weight:bold; color:var(--red); margin-bottom:5px;">📢 Новости</div>
             <div id="news-text" style="font-size:13px;"></div>
@@ -136,10 +135,9 @@
         </div>
     </div>
 
-    <!-- 2. BONUSES (Promos & Balance) -->
+    <!-- 2. BONUSES -->
     <div id="bonuses" class="page">
         <h2>Бонусы</h2>
-        
         <div class="bonus-card">
             <div>
                 <div style="font-size:12px; color:gray;">Ваш баланс</div>
@@ -154,7 +152,6 @@
                 <input type="text" id="user-promo-input" placeholder="Промокод" style="margin:0;">
                 <button onclick="activatePromo()" style="width:auto; padding:0 20px;">OK</button>
             </div>
-            <p style="font-size:10px; color:gray; margin-top:5px;">Бонусы можно копить для будущих покупок.</p>
         </div>
 
         <div style="background: var(--card); padding: 15px; border-radius: 15px;">
@@ -168,49 +165,44 @@
         </div>
     </div>
 
-    <!-- 3. TRANSACTIONS & HISTORY -->
+    <!-- 3. HISTORY -->
     <div id="history" class="page">
         <h3>История покупок</h3>
         <div id="history-items-list"></div>
-        
         <h3 style="margin-top:30px;">Транзакции</h3>
-        <p style="font-size:10px; color:gray;">История начислений и списаний</p>
         <div id="history-trans-list"></div>
     </div>
     
     <!-- 4. ADMIN -->
     <div id="admin" class="page">
         <h2 style="color: var(--red)">Админ Панель</h2>
-        
         <div id="admin-login">
             <input type="password" id="adm-password-input" placeholder="Пароль">
             <button onclick="adminLogin()">Войти</button>
         </div>
 
         <div id="admin-controls" style="display:none;">
-            <!-- Tabs -->
             <div class="admin-tabs">
                 <div class="admin-tab active" onclick="switchAdminTab('adm-tab-users', this)">Юзеры</div>
                 <div class="admin-tab" onclick="switchAdminTab('adm-tab-promos', this)">Промо</div>
                 <div class="admin-tab" onclick="switchAdminTab('adm-tab-theme', this)">Оформление</div>
             </div>
 
-            <!-- TAB: USERS -->
+            <!-- USERS -->
             <div id="adm-tab-users" class="admin-section active">
-                <label>Поиск пользователя (@username):</label>
+                <label>Поиск (@username):</label>
                 <input type="text" id="adm-search-user">
                 <button onclick="adminFindUser()" style="background:#333; margin-bottom:15px;">Найти</button>
                 
-                <!-- Issue Form -->
                 <div id="issue-form" style="display:none; border-top:1px solid #333; padding-top:15px;">
                     <h4>Выдать товар: <span id="issue-target-name" style="color:var(--red)"></span></h4>
                     <input type="text" id="adm-issue-item" placeholder="Название">
-                    <input type="number" id="adm-issue-price" placeholder="Цена (влияет на уровень)">
+                    <input type="number" id="adm-issue-price" placeholder="Цена">
                     <div style="display:flex; gap:10px;">
                         <input type="number" id="adm-issue-dur" placeholder="Срок">
                         <select id="adm-issue-unit">
+                            <option value="days">Дней</option>
                             <option value="hours">Часов</option>
-                            <option value="days" selected>Дней</option>
                             <option value="months">Месяцев</option>
                             <option value="years">Лет</option>
                         </select>
@@ -220,19 +212,19 @@
                 <div id="adm-user-items-list" style="margin-top:15px;"></div>
             </div>
 
-            <!-- TAB: PROMOS -->
+            <!-- PROMOS -->
             <div id="adm-tab-promos" class="admin-section">
-                <h4>Создать промокод</h4>
-                <input type="text" id="promo-code" placeholder="Код (BONUS2026)">
-                <input type="number" id="promo-val" placeholder="Сумма Бонусов">
-                <input type="number" id="promo-hours" placeholder="Срок действия (часов)">
+                <h4>Создать код</h4>
+                <input type="text" id="promo-code" placeholder="Код">
+                <input type="number" id="promo-val" placeholder="Сумма">
+                <input type="number" id="promo-hours" placeholder="Часов действия">
                 <button onclick="adminCreatePromo()">Создать</button>
                 <div id="adm-promos-list" style="margin-top:15px;"></div>
             </div>
             
-            <!-- TAB: THEME (SEASONS) -->
+            <!-- THEME -->
             <div id="adm-tab-theme" class="admin-section">
-                <h4>Режим приложения</h4>
+                <h4>Режим</h4>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
                     <button onclick="setTheme('default')" style="background:#333">Стандарт</button>
                     <button onclick="setTheme('halloween')" style="background:#d35400">🎃 Хэллоуин</button>
@@ -241,14 +233,14 @@
                     <button onclick="setTheme('summer')" style="background:#f1c40f; color:black;">☀️ Лето</button>
                     <button onclick="setTheme('spring')" style="background:#ff69b4">🌸 Весна</button>
                 </div>
-                <h4 style="margin-top:20px;">Текст новостей</h4>
-                <input type="text" id="adm-news-text" placeholder="Текст...">
+                <h4 style="margin-top:20px;">Новости</h4>
+                <input type="text" id="adm-news-text">
                 <button onclick="adminSetNews()" style="background:#333">Обновить</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL EDIT ITEM -->
+    <!-- MODAL -->
     <div id="edit-modal" class="modal">
         <div class="modal-content">
             <h3>Редактирование</h3>
@@ -263,22 +255,22 @@
         </div>
     </div>
 
-    <!-- Bottom Nav -->
     <nav class="bottom-nav">
         <div class="nav-item active" onclick="navTo('home')"><i class="fas fa-home"></i> Главная</div>
         <div class="nav-item" onclick="navTo('bonuses')"><i class="fas fa-gift"></i> Бонусы</div>
         <div class="nav-item" onclick="navTo('history')"><i class="fas fa-history"></i> История</div>
     </nav>
 
-    <!-- FIREBASE LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, increment, collection, query, where, getDocs, deleteDoc } 
         from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-        // === CONFIG ===
-        const MY_ADMIN_PASSWORD = "5815";
-        
+        // ==========================================
+        //  ВСТАВЬ СВОИ ДАННЫЕ НИЖЕ !
+        // ==========================================
+        const MY_ADMIN_PASSWORD = "5815"; 
+
         const firebaseConfig = {
             apiKey: "AIzaSyDFrEbOwmtZlWlrPhImDlA0PE1tQKvYNAY",
             authDomain: "rakstore-a80a8.firebaseapp.com",
@@ -287,6 +279,14 @@
             messagingSenderId: "55025016203",
             appId: "1:55025016203:web:8a6b67666dbb3df285238e"
         };
+        // ==========================================
+
+        // ERROR CHECK
+        if(firebaseConfig.apiKey === "API_KEY") {
+            document.getElementById('error-screen').style.display = 'flex';
+            document.getElementById('error-screen').innerHTML = "<h1>ОШИБКА!</h1><p>Вы не вставили API ключи Firebase в код.</p>";
+            throw new Error("No API Key");
+        }
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -297,39 +297,37 @@
         let myUsername = tg.initDataUnsafe?.user?.username || "unknown";
         if(myUsername) myUsername = myUsername.toLowerCase();
         
-        // === CORE ===
-
         async function init() {
-            // 1. Load Theme
-            const settingsSnap = await getDoc(doc(db, "settings", "general"));
-            if(settingsSnap.exists()) {
-                const s = settingsSnap.data();
-                if(s.theme) applyThemeLocal(s.theme);
-                if(s.news) {
-                    document.getElementById('news-block').style.display = 'block';
-                    document.getElementById('news-text').innerText = s.news;
+            try {
+                // Theme
+                const setRef = doc(db, "settings", "general");
+                const sSnap = await getDoc(setRef);
+                if(sSnap.exists()) {
+                    const d = sSnap.data();
+                    if(d.theme) applyTheme(d.theme);
+                    if(d.news) {
+                        document.getElementById('news-block').style.display = 'block';
+                        document.getElementById('news-text').innerText = d.news;
+                    }
                 }
-            }
 
-            // 2. Load User
-            const userRef = doc(db, "users", myUserId.toString());
-            const snap = await getDoc(userRef);
-            if(snap.exists()) {
-                if(snap.data().username !== myUsername) updateDoc(userRef, { username: myUsername });
-                renderUI(snap.data());
-            } else {
-                const newUser = { 
-                    username: myUsername, name: tg.initDataUnsafe?.user?.first_name || "Guest",
-                    spent: 0, items: [], bonusBalance: 0, transactions: []
-                };
-                await setDoc(userRef, newUser);
-                renderUI(newUser);
-            }
-            document.getElementById('my-ref-id').innerText = myUserId;
+                // User
+                const userRef = doc(db, "users", myUserId.toString());
+                const uSnap = await getDoc(userRef);
+                if(uSnap.exists()) {
+                    if(uSnap.data().username !== myUsername) updateDoc(userRef, { username: myUsername });
+                    renderUI(uSnap.data());
+                } else {
+                    const newUser = { username: myUsername, spent: 0, items: [], bonusBalance: 0, transactions: [] };
+                    await setDoc(userRef, newUser);
+                    renderUI(newUser);
+                }
+                document.getElementById('my-ref-id').innerText = myUserId;
+
+            } catch(e) { console.error(e); }
         }
 
         function renderUI(data) {
-            // Level (xp = spent money on items)
             const RUB_PER_LEVEL = 100000;
             let spent = data.spent || 0;
             let level = Math.floor(spent / RUB_PER_LEVEL) + 1;
@@ -341,7 +339,6 @@
             document.getElementById('rub-current').innerText = (spent % RUB_PER_LEVEL).toLocaleString() + "₽";
             document.getElementById('stat-spent').innerText = spent.toLocaleString() + "₽";
 
-            // Bonuses
             document.getElementById('bonus-balance').innerText = data.bonusBalance || 0;
             if(data.referrerId) {
                 document.getElementById('ref-input-area').style.display = 'none';
@@ -349,277 +346,37 @@
                 document.getElementById('ref-who').innerText = data.referrerId;
             }
 
-            // History Items
-            const listItems = document.getElementById('history-items-list');
-            listItems.innerHTML = "";
-            let activeCount = 0;
-            if(data.items && data.items.length) {
-                const sorted = [...data.items].sort((a,b) => new Date(b.date) - new Date(a.date));
-                sorted.forEach(item => {
-                    const expire = new Date(item.expiryDate);
-                    const isExpired = new Date() > expire;
-                    if(!isExpired) activeCount++;
-                    listItems.innerHTML += `
-                    <div class="warranty-item ${isExpired ? 'expired' : ''}">
-                        <div style="display:flex; justify-content:space-between; font-weight:bold;">
-                            <span>${item.name}</span> <span>${item.price}₽</span>
-                        </div>
-                        <div class="item-dates">
-                            <span>Выдана: ${new Date(item.date).toLocaleDateString()}</span>
-                            <span>До: ${expire.toLocaleDateString()} ${expire.getHours()}:00</span>
-                        </div>
+            // History
+            const listI = document.getElementById('history-items-list');
+            listI.innerHTML = "";
+            let active = 0;
+            if(data.items) {
+                [...data.items].sort((a,b)=>new Date(b.date)-new Date(a.date)).forEach(i => {
+                    const exp = new Date(i.expiryDate);
+                    const isExp = new Date() > exp;
+                    if(!isExp) active++;
+                    listI.innerHTML += `<div class="warranty-item ${isExp?'expired':''}">
+                        <div style="display:flex; justify-content:space-between; font-weight:bold;"><span>${i.name}</span><span>${i.price}₽</span></div>
+                        <div class="item-dates"><span>Выдана: ${new Date(i.date).toLocaleDateString()}</span><span>До: ${exp.toLocaleDateString()} ${exp.getHours()}:00</span></div>
                     </div>`;
                 });
-            } else listItems.innerHTML = "<p style='text-align:center;color:gray'>Пусто</p>";
-            document.getElementById('stat-count').innerText = activeCount;
+            }
+            document.getElementById('stat-count').innerText = active;
 
             // Transactions
-            const listTrans = document.getElementById('history-trans-list');
-            listTrans.innerHTML = "";
-            if(data.transactions && data.transactions.length) {
-                // Reverse to show newest first
+            const listT = document.getElementById('history-trans-list');
+            listT.innerHTML = "";
+            if(data.transactions) {
                 [...data.transactions].reverse().forEach(t => {
-                    const sign = t.amount > 0 ? '+' : '';
-                    const css = t.amount > 0 ? 'trans-plus' : 'trans-minus';
-                    listTrans.innerHTML += `
-                    <div class="trans-item ${css}">
-                        <div>${t.reason}</div>
-                        <div style="font-weight:bold;">${sign}${t.amount}</div>
-                    </div>`;
-                });
-            } else listTrans.innerHTML = "<p style='text-align:center;color:gray'>Нет операций</p>";
-        }
-
-        // === THEME ENGINE ===
-        window.setTheme = async (mode) => {
-            await setDoc(doc(db, "settings", "general"), { theme: mode }, { merge: true });
-            alert("Тема изменена! Перезапустите приложение (или подождите обновления).");
-            applyThemeLocal(mode);
-        }
-
-        function applyThemeLocal(mode) {
-            document.body.className = `mode-${mode}`;
-            const c = document.getElementById('seasonal-container');
-            c.innerHTML = ""; // clear old
-            
-            if(mode === 'newyear') {
-                for(let i=0; i<30; i++) {
-                    const el = document.createElement('div');
-                    el.className = 'snow-flake';
-                    el.innerHTML = '❄';
-                    el.style.left = Math.random()*100 + 'vw';
-                    el.style.animationDuration = (Math.random()*5 + 5) + 's';
-                    el.style.fontSize = (Math.random()*10 + 10) + 'px';
-                    c.appendChild(el);
-                }
-            } else if(mode === 'halloween') {
-                const el = document.createElement('div');
-                el.className = 'ghost';
-                el.innerHTML = '👻';
-                c.appendChild(el);
-            } else if(mode === 'autumn') {
-                for(let i=0; i<15; i++) {
-                    const el = document.createElement('div');
-                    el.className = 'leaf';
-                    el.innerHTML = '🍂';
-                    el.style.left = Math.random()*100 + 'vw';
-                    el.style.animationDuration = (Math.random()*5 + 5) + 's';
-                    c.appendChild(el);
-                }
-            } else if(mode === 'summer') {
-                const el = document.createElement('div');
-                el.className = 'sun-flare';
-                c.appendChild(el);
-            } else if(mode === 'spring') {
-                for(let i=0; i<20; i++) {
-                    const el = document.createElement('div');
-                    el.className = 'flower';
-                    el.innerHTML = '🌸';
-                    el.style.left = Math.random()*100 + 'vw';
-                    el.style.animationDuration = (Math.random()*8 + 4) + 's';
-                    c.appendChild(el);
-                }
-            }
-        }
-
-        // === USER ACTIONS ===
-        window.activatePromo = async () => {
-            const code = document.getElementById('user-promo-input').value.trim().toUpperCase();
-            if(!code) return;
-            const ref = doc(db, "promocodes", code);
-            const snap = await getDoc(ref);
-            if(!snap.exists()) return alert("Код не найден");
-            const p = snap.data();
-            if(new Date() > new Date(p.expiresAt)) return alert("Истек");
-            if(p.users && p.users.includes(myUserId.toString())) return alert("Уже использован");
-
-            // Add Bonus + Transaction
-            const trans = { amount: p.value, reason: `Промокод ${code}`, date: new Date().toISOString() };
-            
-            await updateDoc(ref, { users: arrayUnion(myUserId.toString()) });
-            await updateDoc(doc(db, "users", myUserId.toString()), { 
-                bonusBalance: increment(p.value),
-                transactions: arrayUnion(trans)
-            });
-            alert("Бонусы начислены!");
-            location.reload();
-        }
-
-        window.setReferrer = async () => {
-            const id = document.getElementById('referrer-input').value;
-            if(id == myUserId) return alert("Нельзя себя");
-            const check = await getDoc(doc(db, "users", id.toString()));
-            if(!check.exists()) return alert("Нет такого ID");
-            await updateDoc(doc(db, "users", myUserId.toString()), { referrerId: id.toString() });
-            alert("ОК");
-            location.reload();
-        }
-
-        // === ADMIN ACTIONS ===
-        window.adminLogin = () => {
-            if(document.getElementById('adm-password-input').value === MY_ADMIN_PASSWORD) {
-                document.getElementById('admin-login').style.display = 'none';
-                document.getElementById('admin-controls').style.display = 'block';
-                loadAdminPromos();
-            } else alert("Error");
-        }
-
-        window.switchAdminTab = (id, el) => {
-            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-            el.classList.add('active');
-        }
-
-        // Users
-        let foundUserId = null;
-        window.adminFindUser = async () => {
-            const uname = document.getElementById('adm-search-user').value.trim().toLowerCase().replace("@","");
-            const q = query(collection(db, "users"), where("username", "==", uname));
-            const snap = await getDocs(q);
-            const list = document.getElementById('adm-user-items-list');
-            
-            if(snap.empty) { list.innerHTML="Нет"; document.getElementById('issue-form').style.display='none'; return; }
-
-            const u = snap.docs[0].data();
-            foundUserId = snap.docs[0].id;
-            document.getElementById('issue-form').style.display='block';
-            document.getElementById('issue-target-name').innerText = "@"+u.username;
-            
-            list.innerHTML = "";
-            if(u.items) {
-                u.items.forEach(i => {
-                    list.innerHTML += `
-                    <div class="list-item-row">
-                        <div><b>${i.name}</b> (${i.price}₽)</div>
-                        <div style="display:flex">
-                            <div class="btn-icon" onclick="openEditModal('${foundUserId}','${i.id}')"><i class="fas fa-pen"></i></div>
-                            <div class="btn-icon btn-red" onclick="admDelItem('${foundUserId}','${i.id}',${i.price})"><i class="fas fa-trash"></i></div>
-                        </div>
-                    </div>`;
+                    const css = t.amount>0 ? 'trans-plus' : 'trans-minus';
+                    listT.innerHTML += `<div class="trans-item ${css}"><div>${t.reason}</div><b>${t.amount>0?'+':''}${t.amount}</b></div>`;
                 });
             }
         }
 
-        window.adminGiveItem = async () => {
-            if(!foundUserId) return;
-            const name = document.getElementById('adm-issue-item').value;
-            const price = Number(document.getElementById('adm-issue-price').value);
-            const dur = Number(document.getElementById('adm-issue-dur').value);
-            const unit = document.getElementById('adm-issue-unit').value;
-
-            let d = new Date();
-            if(unit==='hours') d.setHours(d.getHours()+dur);
-            if(unit==='days') d.setDate(d.getDate()+dur);
-            if(unit==='months') d.setMonth(d.getMonth()+dur);
-            if(unit==='years') d.setFullYear(d.getFullYear()+dur);
-
-            const newItem = { id: Date.now().toString(), name, price, date: new Date().toISOString(), expiryDate: d.toISOString() };
-            // Log Transaction
-            const trans = { amount: price, reason: `Покупка: ${name}`, date: new Date().toISOString() }; // Not affecting balance here, just logging price as value of purchase
-
-            await updateDoc(doc(db, "users", foundUserId), {
-                items: arrayUnion(newItem),
-                spent: increment(price),
-                transactions: arrayUnion(trans)
-            });
-            alert("Выдано");
-            adminFindUser();
-        }
-
-        // Promos
-        window.loadAdminPromos = async () => {
-            const d = document.getElementById('adm-promos-list');
-            d.innerHTML = "";
-            const s = await getDocs(collection(db, "promocodes"));
-            s.forEach(doc => {
-                 d.innerHTML += `<div class="list-item-row"><span>${doc.id} (${doc.data().value}B)</span><div class="btn-icon btn-red" onclick="admDelPromo('${doc.id}')"><i class="fas fa-trash"></i></div></div>`;
-            });
-        }
-        window.adminCreatePromo = async () => {
-            const c = document.getElementById('promo-code').value.toUpperCase();
-            const v = Number(document.getElementById('promo-val').value);
-            const h = Number(document.getElementById('promo-hours').value);
-            let exp = new Date(); exp.setHours(exp.getHours()+h);
-            await setDoc(doc(db, "promocodes", c), { value: v, expiresAt: exp.toISOString(), users: [] });
-            loadAdminPromos();
-        }
-        window.admDelPromo = async (id) => { if(confirm("Del?")) { await deleteDoc(doc(db,"promocodes",id)); loadAdminPromos(); }}
-        
-        window.adminSetNews = async () => {
-            const t = document.getElementById('adm-news-text').value;
-            await setDoc(doc(db,"settings","general"),{news: t}, {merge:true});
-            alert("Saved");
-        }
-
-        // Edit/Delete Item
-        window.openEditModal = async (uid, iid) => {
-            const s = await getDoc(doc(db, "users", uid));
-            const i = s.data().items.find(x => x.id === iid);
-            document.getElementById('edit-user-id').value = uid;
-            document.getElementById('edit-item-id').value = iid;
-            document.getElementById('edit-old-price').value = i.price;
-            document.getElementById('edit-name').value = i.name;
-            document.getElementById('edit-price').value = i.price;
-            const dt = new Date(i.expiryDate);
-            dt.setMinutes(dt.getMinutes() - dt.getTimezoneOffset());
-            document.getElementById('edit-date').value = dt.toISOString().slice(0,16);
-            document.getElementById('edit-modal').style.display = 'flex';
-        }
-        window.saveEditedItem = async () => {
-            const uid = document.getElementById('edit-user-id').value;
-            const iid = document.getElementById('edit-item-id').value;
-            const np = Number(document.getElementById('edit-price').value);
-            const op = Number(document.getElementById('edit-old-price').value);
-            const nn = document.getElementById('edit-name').value;
-            const nd = new Date(document.getElementById('edit-date').value).toISOString();
-            
-            const r = doc(db, "users", uid);
-            const s = await getDoc(r);
-            let it = s.data().items;
-            const idx = it.findIndex(x => x.id === iid);
-            if(idx > -1) {
-                it[idx].name = nn; it[idx].price = np; it[idx].expiryDate = nd;
-                await updateDoc(r, { items: it, spent: increment(np - op) });
-                alert("Saved"); document.getElementById('edit-modal').style.display='none'; adminFindUser();
-            }
-        }
-        window.closeModal = () => document.getElementById('edit-modal').style.display='none';
-        window.admDelItem = async (uid, iid, p) => {
-            if(confirm("Del?")) {
-                const r = doc(db, "users", uid);
-                const s = await getDoc(r);
-                const it = s.data().items.filter(x => x.id !== iid);
-                // Add transaction record about deletion (refund)
-                const trans = { amount: -p, reason: "Возврат/Удаление", date: new Date().toISOString() };
-                await updateDoc(r, { items: it, spent: increment(-p), transactions: arrayUnion(trans) });
-                adminFindUser();
-            }
-        }
-
-        // Navigation
+        // --- GLOBAL FUNCTIONS ---
         window.navTo = (id) => {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             document.querySelectorAll('.nav-item').forEach(e => {
                 if(e.getAttribute('onclick').includes(id)) e.classList.add('active'); else e.classList.remove('active');
@@ -630,7 +387,179 @@
         window.toggleSidebar = () => {
             const sb = document.getElementById('sidebar');
             sb.classList.toggle('active');
-            document.querySelector('.sidebar-overlay').style.display = sb.classList.contains('active')?'block':'none';
+            document.querySelector('.sidebar-overlay').style.display=sb.classList.contains('active')?'block':'none';
+        }
+
+        // --- BONUSES ---
+        window.activatePromo = async () => {
+            const c = document.getElementById('user-promo-input').value.trim().toUpperCase();
+            if(!c) return;
+            const ref = doc(db, "promocodes", c);
+            const s = await getDoc(ref);
+            if(!s.exists()) return alert("Код не найден");
+            const d = s.data();
+            if(new Date() > new Date(d.expiresAt)) return alert("Истек");
+            if(d.users && d.users.includes(myUserId.toString())) return alert("Уже был");
+
+            const trans = { amount: d.value, reason: `Код ${c}`, date: new Date().toISOString() };
+            await updateDoc(ref, { users: arrayUnion(myUserId.toString()) });
+            await updateDoc(doc(db,"users",myUserId.toString()), { 
+                bonusBalance: increment(d.value), transactions: arrayUnion(trans) 
+            });
+            alert("Бонусы!"); location.reload();
+        }
+
+        window.setReferrer = async () => {
+            const id = document.getElementById('referrer-input').value;
+            if(id == myUserId) return alert("Нельзя");
+            const c = await getDoc(doc(db,"users",id.toString()));
+            if(!c.exists()) return alert("Нет ID");
+            await updateDoc(doc(db,"users",myUserId.toString()), { referrerId: id.toString() });
+            alert("ОК"); location.reload();
+        }
+
+        // --- ADMIN ---
+        window.adminLogin = () => {
+            if(document.getElementById('adm-password-input').value === MY_ADMIN_PASSWORD) {
+                document.getElementById('admin-login').style.display = 'none';
+                document.getElementById('admin-controls').style.display = 'block';
+                loadPromos();
+            }
+        }
+        window.switchAdminTab = (id, el) => {
+            document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        // Theme
+        window.setTheme = async (mode) => {
+            await setDoc(doc(db,"settings","general"), {theme: mode}, {merge:true});
+            applyTheme(mode); alert("Тема применена");
+        }
+        window.adminSetNews = async () => {
+            await setDoc(doc(db,"settings","general"), {news: document.getElementById('adm-news-text').value}, {merge:true});
+            alert("Новости обновлены");
+        }
+        function applyTheme(mode) {
+            document.body.className = `mode-${mode}`;
+            const c = document.getElementById('seasonal-container'); c.innerHTML = "";
+            if(mode==='newyear') createParticles(c,'snow-flake','❄',30);
+            if(mode==='halloween') { const e=document.createElement('div'); e.className='ghost'; e.innerHTML='👻'; c.appendChild(e); }
+            if(mode==='autumn') createParticles(c,'leaf','🍂',15);
+            if(mode==='summer') { const e=document.createElement('div'); e.className='sun-flare'; c.appendChild(e); }
+            if(mode==='spring') createParticles(c,'flower','🌸',20);
+        }
+        function createParticles(c, cls, char, num) {
+            for(let i=0; i<num; i++) {
+                const el=document.createElement('div'); el.className=cls; el.innerHTML=char;
+                el.style.left=Math.random()*100+'vw'; el.style.animationDuration=(Math.random()*5+5)+'s';
+                c.appendChild(el);
+            }
+        }
+
+        // Promos
+        async function loadPromos() {
+            const d = document.getElementById('adm-promos-list'); d.innerHTML="";
+            (await getDocs(collection(db,"promocodes"))).forEach(x => {
+                d.innerHTML += `<div class="list-item-row"><span>${x.id} (${x.data().value})</span><div class="btn-icon btn-red" onclick="delPromo('${x.id}')"><i class="fas fa-trash"></i></div></div>`;
+            });
+        }
+        window.adminCreatePromo = async () => {
+            const c = document.getElementById('promo-code').value.toUpperCase();
+            const v = Number(document.getElementById('promo-val').value);
+            const h = Number(document.getElementById('promo-hours').value);
+            let e = new Date(); e.setHours(e.getHours()+h);
+            await setDoc(doc(db,"promocodes",c), {value:v, expiresAt:e.toISOString(), users:[]});
+            loadPromos();
+        }
+        window.delPromo = async (id) => { if(confirm("Del?")) { await deleteDoc(doc(db,"promocodes",id)); loadPromos(); }};
+
+        // Users
+        let fUid = null;
+        window.adminFindUser = async () => {
+            const n = document.getElementById('adm-search-user').value.toLowerCase().trim().replace("@","");
+            const q = query(collection(db,"users"), where("username","==",n));
+            const s = await getDocs(q);
+            const l = document.getElementById('adm-user-items-list'); l.innerHTML="";
+            if(s.empty) { document.getElementById('issue-form').style.display='none'; l.innerHTML="Нет"; return; }
+            
+            const u = s.docs[0].data(); fUid = s.docs[0].id;
+            document.getElementById('issue-form').style.display='block';
+            document.getElementById('issue-target-name').innerText = "@"+u.username;
+            if(u.items) {
+                u.items.forEach(i => {
+                    l.innerHTML += `<div class="list-item-row">
+                    <div><b>${i.name}</b> (${i.price}₽)</div>
+                    <div style="display:flex"><div class="btn-icon" onclick="openEdit('${fUid}','${i.id}')"><i class="fas fa-pen"></i></div>
+                    <div class="btn-icon btn-red" onclick="delItem('${fUid}','${i.id}',${i.price})"><i class="fas fa-trash"></i></div></div></div>`;
+                });
+            }
+        }
+
+        window.adminGiveItem = async () => {
+            if(!fUid) return;
+            const nm = document.getElementById('adm-issue-item').value;
+            const pr = Number(document.getElementById('adm-issue-price').value);
+            const dur = Number(document.getElementById('adm-issue-dur').value);
+            const unit = document.getElementById('adm-issue-unit').value;
+            let d = new Date(); 
+            if(unit==='hours') d.setHours(d.getHours()+dur);
+            if(unit==='days') d.setDate(d.getDate()+dur);
+            if(unit==='months') d.setMonth(d.getMonth()+dur);
+            if(unit==='years') d.setFullYear(d.getFullYear()+dur);
+
+            const newItem = { id: Date.now().toString()+Math.random().toString().slice(2), name: nm, price: pr, date: new Date().toISOString(), expiryDate: d.toISOString() };
+            const trans = { amount: pr, reason: "Покупка: "+nm, date: new Date().toISOString() };
+            
+            await updateDoc(doc(db,"users",fUid), { items: arrayUnion(newItem), spent: increment(pr), transactions: arrayUnion(trans) });
+            alert("ОК"); adminFindUser();
+        }
+
+        window.openEdit = async (uid, iid) => {
+            const s = await getDoc(doc(db,"users",uid));
+            const item = s.data().items.find(x => x.id === iid);
+            document.getElementById('edit-user-id').value = uid;
+            document.getElementById('edit-item-id').value = iid;
+            document.getElementById('edit-name').value = item.name;
+            document.getElementById('edit-price').value = item.price;
+            document.getElementById('edit-old-price').value = item.price;
+            let dt = new Date(item.expiryDate); dt.setMinutes(dt.getMinutes()-dt.getTimezoneOffset());
+            document.getElementById('edit-date').value = dt.toISOString().slice(0,16);
+            document.getElementById('edit-modal').style.display='flex';
+        }
+
+        window.saveEditedItem = async () => {
+            const uid = document.getElementById('edit-user-id').value;
+            const iid = document.getElementById('edit-item-id').value;
+            const np = Number(document.getElementById('edit-price').value);
+            const op = Number(document.getElementById('edit-old-price').value);
+            const nn = document.getElementById('edit-name').value;
+            const nd = new Date(document.getElementById('edit-date').value).toISOString();
+
+            const r = doc(db,"users",uid);
+            const s = await getDoc(r);
+            let arr = s.data().items;
+            const idx = arr.findIndex(x => x.id === iid);
+            if(idx > -1) {
+                arr[idx].name=nn; arr[idx].price=np; arr[idx].expiryDate=nd;
+                await updateDoc(r, { items: arr, spent: increment(np-op) });
+                document.getElementById('edit-modal').style.display='none';
+                alert("Saved"); adminFindUser();
+            }
+        }
+        window.closeModal = () => document.getElementById('edit-modal').style.display='none';
+
+        window.delItem = async (uid, iid, p) => {
+            if(confirm("Del?")) {
+                const r = doc(db,"users",uid);
+                const s = await getDoc(r);
+                const arr = s.data().items.filter(x => x.id !== iid);
+                const trans = { amount: -p, reason: "Удаление", date: new Date().toISOString() };
+                await updateDoc(r, { items: arr, spent: increment(-p), transactions: arrayUnion(trans) });
+                adminFindUser();
+            }
         }
 
         init();
