@@ -8,43 +8,53 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        :root { --bg: #1c1c1e; --card: #2c2c2e; --text: #fff; --red: #ff3b30; --green: #30d158; }
-        body { background: var(--bg); color: var(--text); font-family: sans-serif; margin: 0; padding-bottom: 80px; overflow-x: hidden; }
+        :root { --bg: #1c1c1e; --card: #2c2c2e; --text: #fff; --red: #ff3b30; --green: #30d158; --gray: #8e8e93; }
+        body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding-bottom: 80px; overflow-x: hidden; }
         
-        /* Header */
+        /* General Styles */
         header { display: flex; justify-content: space-between; padding: 15px 20px; background: var(--card); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
         .brand { font-size: 24px; font-weight: 900; color: var(--red); text-transform: uppercase; }
         .burger { font-size: 24px; cursor: pointer; }
 
-        /* Sidebar */
-        .sidebar { position: fixed; top: 0; right: -80%; width: 70%; height: 100%; background: var(--card); z-index: 200; transition: 0.3s; padding-top: 60px; display: flex; flex-direction: column; }
-        .sidebar.active { right: 0; }
-        .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 199; }
-        .sidebar-item { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; display: flex; gap: 15px; align-items: center; }
-
-        /* Content */
         .page { display: none; padding: 20px; animation: fadeIn 0.3s; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Level Card */
+        /* UI Elements */
         .level-card { background: linear-gradient(135deg, #ff3b30, #ff9f0a); padding: 20px; border-radius: 20px; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 15px rgba(255, 59, 48, 0.4); }
         .discount-big { font-size: 48px; font-weight: bold; margin: 10px 0; }
         .xp-bar-bg { background: rgba(0,0,0,0.2); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 10px; }
         .xp-bar-fill { background: white; height: 100%; width: 0%; transition: 1s; }
 
-        /* Items */
-        .warranty-item { background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 10px; border-left: 4px solid var(--green); }
-        .stat-box { background: var(--card); padding: 15px; border-radius: 15px; text-align: center; width: 45%; }
         .stats-grid { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .stat-box { background: var(--card); padding: 15px; border-radius: 15px; text-align: center; width: 45%; }
 
-        /* Inputs */
+        /* Items List */
+        .warranty-item { background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 10px; border-left: 4px solid var(--green); position: relative; }
+        .warranty-item.expired { border-left: 4px solid var(--gray); opacity: 0.7; }
+        .item-header { display: flex; justify-content: space-between; font-weight: bold; font-size: 16px; }
+        .item-dates { font-size: 11px; color: var(--gray); margin-top: 5px; }
+        .item-status { font-size: 12px; margin-top: 5px; font-weight: bold; }
+        .status-active { color: var(--green); }
+        .status-expired { color: var(--red); }
+        
+        /* Admin Delete Button */
+        .btn-delete { background: #ff453a; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 12px; cursor: pointer; margin-left: 10px; }
+
+        /* Inputs & Admin */
         input, select { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box; }
         button { width: 100%; padding: 15px; background: var(--red); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .admin-section { border: 1px solid #333; padding: 15px; border-radius: 15px; margin-bottom: 20px; background: rgba(255,255,255,0.02); }
+        .hidden { display: none; }
         
-        .admin-section { border: 1px solid #333; padding: 15px; border-radius: 15px; margin-bottom: 20px; }
+        .flex-row { display: flex; gap: 10px; }
 
-        /* Nav */
+        /* Sidebar & Nav */
+        .sidebar { position: fixed; top: 0; right: -80%; width: 70%; height: 100%; background: var(--card); z-index: 200; transition: 0.3s; padding-top: 60px; display: flex; flex-direction: column; }
+        .sidebar.active { right: 0; }
+        .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 199; }
+        .sidebar-item { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; display: flex; gap: 15px; align-items: center; }
+        
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--card); display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #333; }
         .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: gray; }
         .nav-item.active { color: var(--red); }
@@ -53,7 +63,6 @@
 </head>
 <body>
 
-    <!-- Header -->
     <header>
         <div class="brand">RakStore</div>
         <div class="burger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
@@ -64,66 +73,89 @@
         <div class="sidebar-item" onclick="toggleSidebar()"><i class="fas fa-times"></i> Закрыть</div>
         <div class="sidebar-item" onclick="navTo('home')"><i class="fas fa-home"></i> Главная</div>
         <div class="sidebar-item" onclick="navTo('history')"><i class="fas fa-shopping-bag"></i> История</div>
-        <div class="sidebar-item" onclick="navTo('admin')"><i class="fas fa-cogs" style="color: var(--red)"></i> Админ Панель</div>
+        <div class="sidebar-item" onclick="navTo('admin')"><i class="fas fa-user-shield" style="color: var(--red)"></i> Админ Панель</div>
     </div>
 
-    <!-- HOME -->
+    <!-- HOME PAGE -->
     <div id="home" class="page active">
         <div class="level-card">
             <div>ВАШ УРОВЕНЬ: <span id="lvl-display">1</span></div>
             <div class="discount-big" id="discount-display">5%</div>
-            
             <div class="xp-bar-bg"><div class="xp-bar-fill" id="xp-fill"></div></div>
-            
             <div style="display:flex; justify-content:space-between; margin-top:5px; font-size:12px;">
                 <span id="rub-current">0₽</span> <span id="rub-next">100 000₽</span>
             </div>
             <div style="font-size: 10px; opacity: 0.7; margin-top: 5px;">до следующей скидки</div>
         </div>
-
-        <h3>Статистика</h3>
         <div class="stats-grid">
             <div class="stat-box">
                 <div style="font-size:20px; font-weight:bold; color:var(--red)" id="stat-count">0</div>
-                <div style="font-size:12px; color:gray">Покупок</div>
+                <div style="font-size:12px; color:gray">Активных покупок</div>
             </div>
             <div class="stat-box">
                 <div style="font-size:20px; font-weight:bold; color:var(--red)" id="stat-spent">0₽</div>
                 <div style="font-size:12px; color:gray">Потрачено</div>
             </div>
         </div>
-        <p id="loading-text" style="text-align:center; color:gray;">Загрузка данных...</p>
+        <p id="loading-text" style="text-align:center; color:gray;">Загрузка...</p>
     </div>
 
-    <!-- HISTORY -->
+    <!-- HISTORY PAGE -->
     <div id="history" class="page">
         <h2>Мои покупки</h2>
         <div id="history-list"></div>
     </div>
 
-    <!-- ADMIN -->
+    <!-- ADMIN PAGE -->
     <div id="admin" class="page">
         <h2 style="color: var(--red)">Админ Панель</h2>
-        <p style="font-size:12px; color:gray; margin-bottom: 15px;">Только для администратора</p>
         
-        <div class="admin-section">
-            <label>1. Пароль администратора:</label>
-            <input type="password" id="adm-password" placeholder="Введите пароль">
+        <!-- Login Screen -->
+        <div id="admin-login">
+            <p>Введите пароль для доступа:</p>
+            <input type="password" id="adm-password-input" placeholder="Пароль">
+            <button onclick="adminLogin()">Войти</button>
         </div>
 
-        <div class="admin-section">
-            <label>2. Кому выдать (@username):</label>
-            <input type="text" id="adm-username" placeholder="Пример: durov (без @)">
+        <!-- Controls (Hidden by default) -->
+        <div id="admin-controls" class="hidden">
             
-            <label>3. Данные о покупке:</label>
-            <input type="text" id="adm-item" placeholder="Название товара">
-            <input type="number" id="adm-price" placeholder="Цена (RUB)">
-            <input type="text" id="adm-warranty" placeholder="Срок гарантии (текстом)">
-            
-            <button onclick="adminGiveItem()">Выдать и сохранить</button>
+            <!-- 1. ISSUE ITEM -->
+            <div class="admin-section">
+                <h3><i class="fas fa-plus-circle"></i> Выдать товар</h3>
+                <label>Кому (@username):</label>
+                <input type="text" id="adm-username" placeholder="Пример: durov">
+                
+                <label>Товар и Цена:</label>
+                <input type="text" id="adm-item" placeholder="Название (Spotify)">
+                <input type="number" id="adm-price" placeholder="Цена (RUB)">
+                
+                <label>Гарантия:</label>
+                <div class="flex-row">
+                    <input type="number" id="adm-duration" placeholder="Срок" style="width: 40%;">
+                    <select id="adm-unit" style="width: 60%;">
+                        <option value="hours">Часов</option>
+                        <option value="days" selected>Дней</option>
+                        <option value="months">Месяцев</option>
+                        <option value="years">Лет</option>
+                    </select>
+                </div>
+                
+                <button onclick="adminGiveItem()">Выдать и сохранить</button>
+            </div>
+
+            <!-- 2. MANAGE USERS -->
+            <div class="admin-section">
+                <h3><i class="fas fa-search"></i> Управление / Удаление</h3>
+                <p style="font-size:12px; color:gray">Найти пользователя чтобы удалить покупки</p>
+                <input type="text" id="adm-search-user" placeholder="Введите username (без @)">
+                <button onclick="adminFindUser()" style="background: #333; margin-bottom: 10px;">Найти пользователя</button>
+                
+                <div id="adm-user-items" style="margin-top: 15px;"></div>
+            </div>
+
+            <button onclick="location.reload()" style="background: #333; margin-top:20px;">Выйти</button>
         </div>
-        
-        <p style="font-size:11px; color:gray;">* Уровень повышается автоматически при достижении суммы.</p>
     </div>
 
     <nav class="bottom-nav">
@@ -131,20 +163,17 @@
         <div class="nav-item" onclick="navTo('history')"><i class="fas fa-shopping-bag"></i>Покупки</div>
     </nav>
 
-    <!-- FIREBASE SDK -->
+    <!-- FIREBASE & LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, increment, collection, query, where, getDocs } 
         from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         // ==========================================
-        //  НАСТРОЙКИ (РЕДАКТИРУЙ ЭТО)
+        //  НАСТРОЙКИ
         // ==========================================
+        const MY_ADMIN_PASSWORD = "5815"; // <--- ТВОЙ ПАРОЛЬ
         
-        // 1. ПАРОЛЬ АДМИНИСТРАТОРА
-        const MY_ADMIN_PASSWORD = "5815"; // <--- Придумай свой пароль и впиши сюда
-        
-        // 2. КОНФИГ FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyDFrEbOwmtZlWlrPhImDlA0PE1tQKvYNAY",
             authDomain: "rakstore-a80a8.firebaseapp.com",
@@ -155,37 +184,31 @@
         };
         // ==========================================
 
-        // Инициализация
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Данные текущего пользователя
         let myUserId = tg.initDataUnsafe?.user?.id || 11111; 
         let myUsername = tg.initDataUnsafe?.user?.username || "unknown";
         let myName = tg.initDataUnsafe?.user?.first_name || "Guest";
-        
-        // Приводим никнейм к нижнему регистру для поиска
         if(myUsername) myUsername = myUsername.toLowerCase();
 
-        // --- ЛОГИКА ---
+        // --- 1. LOGIN & INIT ---
 
         async function loadUser() {
             const userRef = doc(db, "users", myUserId.toString());
             const userSnap = await getDoc(userRef);
 
             if (userSnap.exists()) {
-                // Если юзер есть, обновляем ему username (вдруг сменил)
                 if (userSnap.data().username !== myUsername) {
                     updateDoc(userRef, { username: myUsername });
                 }
                 renderUI(userSnap.data());
             } else {
-                // Новый юзер
                 const newUser = { 
                     name: myName, 
-                    username: myUsername, // Сохраняем username для поиска
+                    username: myUsername, 
                     spent: 0, 
                     items: [] 
                 };
@@ -196,122 +219,201 @@
         }
 
         function renderUI(data) {
-            // Расчет уровня: каждые 100,000 руб
+            // Level Logic
             const RUB_PER_LEVEL = 100000;
-            
             let spent = data.spent || 0;
-            // Уровень 1 (0-99k), Уровень 2 (100k-199k) и т.д.
             let level = Math.floor(spent / RUB_PER_LEVEL) + 1;
-            let discount = level * 5; // Скидка
-            
-            // Прогресс бар
+            let discount = level * 5;
             let currentLevelProgress = spent % RUB_PER_LEVEL;
             let percent = (currentLevelProgress / RUB_PER_LEVEL) * 100;
 
-            // Отображение
             document.getElementById('lvl-display').innerText = level;
             document.getElementById('discount-display').innerText = discount + "%";
-            
             document.getElementById('xp-fill').style.width = percent + "%";
             document.getElementById('rub-current').innerText = currentLevelProgress.toLocaleString() + "₽";
-            document.getElementById('rub-next').innerText = RUB_PER_LEVEL.toLocaleString() + "₽"; // Всегда 100к шаг
-            
-            // Статистика
-            document.getElementById('stat-count').innerText = data.items ? data.items.length : 0;
+            document.getElementById('rub-next').innerText = RUB_PER_LEVEL.toLocaleString() + "₽";
             document.getElementById('stat-spent').innerText = spent.toLocaleString() + "₽";
 
-            // История
+            // Items Rendering
             const list = document.getElementById('history-list');
             list.innerHTML = "";
+            let activeCount = 0;
+
             if(data.items && data.items.length > 0) {
-                // Сортируем: новые сверху
-                [...data.items].reverse().forEach(item => {
+                // Sort by purchase date (newest first)
+                const sortedItems = [...data.items].sort((a,b) => new Date(b.date) - new Date(a.date));
+                
+                sortedItems.forEach(item => {
+                    const now = new Date();
+                    const expire = new Date(item.expiryDate);
+                    const isExpired = now > expire;
+                    if(!isExpired) activeCount++;
+
+                    // Format Dates
+                    const dateBought = new Date(item.date).toLocaleDateString();
+                    const dateExpire = expire.toLocaleDateString();
+
                     list.innerHTML += `
-                    <div class="warranty-item">
-                        <div style="display:flex; justify-content:space-between">
-                            <b>${item.name}</b> <span>${item.price}₽</span>
+                    <div class="warranty-item ${isExpired ? 'expired' : ''}">
+                        <div class="item-header">
+                            <span>${item.name}</span>
+                            <span>${item.price}₽</span>
                         </div>
-                        <div style="color:var(--green); font-size:13px; margin-top:5px;">
-                            <i class="fas fa-shield-alt"></i> Гарантия: ${item.warranty}
+                        <div class="item-status ${isExpired ? 'status-expired' : 'status-active'}">
+                            ${isExpired ? '<i class="fas fa-times-circle"></i> Истекла' : '<i class="fas fa-check-circle"></i> Активна'}
+                        </div>
+                        <div class="item-dates">
+                            <div>Выдана: ${dateBought}</div>
+                            <div>Истекает: ${dateExpire}</div>
                         </div>
                     </div>`;
                 });
             } else {
                 list.innerHTML = "<p style='text-align:center; color:gray'>Покупок нет</p>";
             }
+            document.getElementById('stat-count').innerText = activeCount;
         }
 
-        // --- АДМИН ФУНКЦИЯ (ВЫДАЧА ПО @USERNAME) ---
-        
-        window.adminGiveItem = async () => {
-            // 1. Проверка пароля
-            let enteredPass = document.getElementById('adm-password').value;
-            if (enteredPass !== MY_ADMIN_PASSWORD) {
-                return alert("Неверный пароль администратора!");
-            }
+        // --- 2. ADMIN FUNCTIONS ---
 
-            // 2. Сбор данных
-            let rawUsername = document.getElementById('adm-username').value.trim();
+        // Login
+        window.adminLogin = () => {
+            const input = document.getElementById('adm-password-input').value;
+            if(input === MY_ADMIN_PASSWORD) {
+                document.getElementById('admin-login').style.display = 'none';
+                document.getElementById('admin-controls').classList.remove('hidden');
+            } else {
+                alert("Неверный пароль");
+            }
+        }
+
+        // Give Item
+        window.adminGiveItem = async () => {
+            let targetUser = document.getElementById('adm-username').value.trim().replace("@", "").toLowerCase();
             let name = document.getElementById('adm-item').value;
             let price = parseInt(document.getElementById('adm-price').value);
-            let warranty = document.getElementById('adm-warranty').value;
+            let duration = parseInt(document.getElementById('adm-duration').value);
+            let unit = document.getElementById('adm-unit').value;
 
-            if(!rawUsername || !name || !price || !warranty) return alert("Заполните все поля");
+            if(!targetUser || !name || !price || !duration) return alert("Заполните все поля");
 
-            // Очистка никнейма от @ и пробелов, перевод в нижний регистр
-            let targetUsername = rawUsername.replace("@", "").toLowerCase();
+            // Calculate Expiry
+            let expiryDate = new Date();
+            if(unit === 'hours') expiryDate.setHours(expiryDate.getHours() + duration);
+            if(unit === 'days') expiryDate.setDate(expiryDate.getDate() + duration);
+            if(unit === 'months') expiryDate.setMonth(expiryDate.getMonth() + duration);
+            if(unit === 'years') expiryDate.setFullYear(expiryDate.getFullYear() + duration);
 
-            // 3. Поиск пользователя по username в базе
             try {
                 const usersRef = collection(db, "users");
-                // Ищем документ, где поле username == targetUsername
-                const q = query(usersRef, where("username", "==", targetUsername));
+                const q = query(usersRef, where("username", "==", targetUser));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) return alert("Пользователь не найден");
+
+                let userDoc = querySnapshot.docs[0];
+                
+                // Create Item Object
+                const newItem = {
+                    id: Date.now(), // Unique ID for deletion
+                    name,
+                    price,
+                    date: new Date().toISOString(),
+                    expiryDate: expiryDate.toISOString(),
+                    warrantyLabel: `${duration} ${unit}`
+                };
+
+                await updateDoc(doc(db, "users", userDoc.id), {
+                    items: arrayUnion(newItem),
+                    spent: increment(price)
+                });
+
+                alert("Товар выдан!");
+                // Clear form
+                document.getElementById('adm-item').value = "";
+                if(userDoc.id == myUserId.toString()) loadUser();
+
+            } catch(e) { console.error(e); alert("Ошибка базы данных"); }
+        }
+
+        // Find User & Show Items for Deletion
+        window.adminFindUser = async () => {
+            let targetUser = document.getElementById('adm-search-user').value.trim().replace("@", "").toLowerCase();
+            const container = document.getElementById('adm-user-items');
+            container.innerHTML = "Поиск...";
+
+            try {
+                const usersRef = collection(db, "users");
+                const q = query(usersRef, where("username", "==", targetUser));
                 const querySnapshot = await getDocs(q);
 
                 if (querySnapshot.empty) {
-                    return alert(`Пользователь @${targetUsername} не найден! Он должен зайти в бот хотя бы один раз.`);
+                    container.innerHTML = "<span style='color:red'>Пользователь не найден</span>";
+                    return;
                 }
 
-                // 4. Начисление (берем первого найденного)
                 let userDoc = querySnapshot.docs[0];
-                let userRef = doc(db, "users", userDoc.id);
+                let userData = userDoc.data();
+                let userId = userDoc.id;
 
-                const newItem = { 
-                    name, 
-                    price, 
-                    warranty, 
-                    date: new Date().toISOString() 
-                };
+                if (!userData.items || userData.items.length === 0) {
+                    container.innerHTML = "У пользователя нет покупок.";
+                    return;
+                }
 
-                await updateDoc(userRef, {
-                    items: arrayUnion(newItem),
-                    spent: increment(price) // Автоматически увеличивает потраченное -> повышает уровень
-                });
-
-                alert(`Успешно выдано пользователю @${targetUsername}!`);
+                let html = `<p>Покупки пользователя <b>${userData.name}</b>:</p>`;
                 
-                // Очистка полей
-                document.getElementById('adm-item').value = '';
-                document.getElementById('adm-price').value = '';
+                // Render list with Delete buttons
+                userData.items.forEach((item, index) => {
+                    html += `
+                    <div style="background: #222; padding: 10px; margin-bottom: 5px; border-radius: 5px; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <b>${item.name}</b> (${item.price}₽)<br>
+                            <span style="font-size:10px; color:gray">До: ${new Date(item.expiryDate).toLocaleDateString()}</span>
+                        </div>
+                        <button class="btn-delete" onclick="adminDeleteItem('${userId}', ${item.id}, ${item.price})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>`;
+                });
+                container.innerHTML = html;
 
-                // Если выдали себе, обновляем экран
-                if(userDoc.id == myUserId.toString()) loadUser();
-
-            } catch(e) { 
-                alert("Ошибка базы данных. Проверьте консоль."); 
-                console.error(e); 
-            }
+            } catch(e) { console.error(e); }
         }
 
-        // Запуск
+        // Delete Item Function
+        window.adminDeleteItem = async (userId, itemId, itemPrice) => {
+            if(!confirm("Удалить эту покупку? Сумма потраченного уменьшится.")) return;
+
+            try {
+                const userRef = doc(db, "users", userId);
+                const userSnap = await getDoc(userRef);
+                const userData = userSnap.data();
+
+                // Filter out the item
+                const updatedItems = userData.items.filter(i => i.id !== itemId);
+                
+                // Update DB
+                await updateDoc(userRef, {
+                    items: updatedItems,
+                    spent: increment(-itemPrice) // Subtract money
+                });
+
+                alert("Покупка удалена!");
+                document.getElementById('adm-user-items').innerHTML = ""; // Clear list
+                if(userId == myUserId.toString()) loadUser(); // Refresh self if needed
+
+            } catch(e) { console.error(e); alert("Ошибка удаления"); }
+        }
+
+        // Init
         loadUser();
 
-        // UI функции
+        // Nav Logic
         window.toggleSidebar = () => {
-            const sb = document.getElementById('sidebar');
-            const ov = document.querySelector('.sidebar-overlay');
-            sb.classList.toggle('active');
-            ov.style.display = sb.classList.contains('active') ? 'block' : 'none';
+            document.getElementById('sidebar').classList.toggle('active');
+            let ov = document.querySelector('.sidebar-overlay');
+            ov.style.display = ov.style.display === 'block' ? 'none' : 'block';
         }
         window.navTo = (id) => {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
