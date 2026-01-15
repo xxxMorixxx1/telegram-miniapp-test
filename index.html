@@ -29,74 +29,35 @@
             transition: background 0.5s, color 0.5s;
         }
 
-        /* --- SEASONAL MODES (UPDATED) --- */
+        /* --- SEASONAL MODES --- */
         #seasonal-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; overflow: hidden; }
 
-        /* 1. HALLOWEEN: Spooky Red/Black Gradient + Ghosts */
-        body.mode-halloween { 
-            background: radial-gradient(circle at 50% 10%, #4a0e0e, #000000); /* Blood moon vibe */
-            --red: #ff4500; 
-            --card: rgba(40, 10, 5, 0.85); 
-        }
-        .ghost { position: absolute; font-size: 35px; opacity: 0.4; animation: floatGhost 12s linear infinite; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); }
-        @keyframes floatGhost { 
-            0% { transform: translate(-10vw, 110vh) rotate(0deg); opacity: 0; } 
-            20% { opacity: 0.4; }
-            80% { opacity: 0.4; }
-            100% { transform: translate(110vw, -10vh) rotate(20deg); opacity: 0; } 
-        }
+        /* Halloween */
+        body.mode-halloween { background: radial-gradient(circle at 50% 10%, #4a0e0e, #000000); --red: #ff4500; --card: rgba(40, 10, 5, 0.85); }
+        .ghost { position: absolute; font-size: 35px; opacity: 0.4; animation: floatGhost 12s linear infinite; }
+        @keyframes floatGhost { 0% { transform: translate(-10vw, 110vh) rotate(0deg); opacity: 0; } 100% { transform: translate(110vw, -10vh) rotate(20deg); opacity: 0; } }
 
-        /* 2. NEW YEAR: Icy Blue Night + Snow */
-        body.mode-newyear { 
-            background: linear-gradient(180deg, #021b35 0%, #000510 100%); /* Night Sky */
-            --red: #00bfff; /* Icy Blue Accent */
-            --green: #00ffcc;
-            --card: rgba(2, 30, 60, 0.8);
-        }
-        .snow-flake { position: absolute; color: white; top: -20px; animation: fall 8s linear infinite; opacity: 0.9; text-shadow: 0 0 5px white; }
-        @keyframes fall { 
-            0% { transform: translateY(-20px) translateX(0); }
-            100% { transform: translateY(110vh) translateX(20px); } 
-        }
+        /* New Year */
+        body.mode-newyear { background: linear-gradient(180deg, #021b35 0%, #000510 100%); --red: #00bfff; --green: #00ffcc; --card: rgba(2, 30, 60, 0.8); }
+        .snow-flake { position: absolute; color: white; top: -20px; animation: fall 8s linear infinite; opacity: 0.9; }
+        @keyframes fall { 0% { transform: translateY(-20px) translateX(0); } 100% { transform: translateY(110vh) translateX(20px); } }
 
-        /* 3. AUTUMN: Golden Brown + Falling Leaves */
-        body.mode-autumn { 
-            background: linear-gradient(135deg, #2e1a00, #140a00); /* Deep Wood */
-            --red: #d35400; 
-            --green: #d4ac0d;
-            --card: rgba(30, 15, 0, 0.85);
-        }
+        /* Autumn */
+        body.mode-autumn { background: linear-gradient(135deg, #2e1a00, #140a00); --red: #d35400; --green: #d4ac0d; --card: rgba(30, 15, 0, 0.85); }
         .leaf { position: absolute; color: #d35400; animation: fallRotate 10s linear infinite; font-size: 20px; }
-        @keyframes fallRotate { 
-            0% { transform: translateY(-10vh) rotate(0deg) translateX(0); } 
-            100% { transform: translateY(110vh) rotate(360deg) translateX(50px); } 
-        }
+        @keyframes fallRotate { 0% { transform: translateY(-10vh) rotate(0deg); } 100% { transform: translateY(110vh) rotate(360deg); } }
 
-        /* 4. SUMMER: Sunny Glow + Flare */
-        body.mode-summer { 
-            background: linear-gradient(to bottom, #1a1500, #001a1a); /* Sunset to Ocean */
-            --red: #ffcc00; /* Sun Yellow */
-            --card: rgba(20, 20, 0, 0.8);
-        }
-        .sun-flare { 
-            position: absolute; top: -80px; right: -80px; width: 300px; height: 300px; 
-            background: radial-gradient(circle, rgba(255,204,0,0.4) 0%, rgba(0,0,0,0) 70%); 
-            filter: blur(20px); animation: pulseSun 5s infinite alternate;
-        }
-        @keyframes pulseSun { from { transform: scale(1); } to { transform: scale(1.1); } }
+        /* Summer */
+        body.mode-summer { background: linear-gradient(to bottom, #1a1500, #001a1a); --red: #ffcc00; --card: rgba(20, 20, 0, 0.8); }
+        .sun-flare { position: absolute; top: -80px; right: -80px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,204,0,0.4) 0%, rgba(0,0,0,0) 70%); filter: blur(20px); }
 
-        /* 5. SPRING: Fresh Green/Pink + Flowers */
-        body.mode-spring { 
-            background: linear-gradient(to bottom, #0f2015, #000000); 
-            --red: #ff69b4; /* Pink */
-            --green: #2ecc71;
-            --card: rgba(10, 30, 20, 0.85);
-        }
+        /* Spring */
+        body.mode-spring { background: linear-gradient(to bottom, #0f2015, #000000); --red: #ff69b4; --green: #2ecc71; --card: rgba(10, 30, 20, 0.85); }
         .flower { position: absolute; color: #ff69b4; animation: fall 12s linear infinite; font-size: 16px; }
 
         /* UI ELEMENTS */
-        header { display: flex; justify-content: space-between; padding: 15px 20px; background: var(--card); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.3); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .brand { font-size: 24px; font-weight: 900; color: var(--red); text-transform: uppercase; text-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        header { display: flex; justify-content: space-between; padding: 15px 20px; background: var(--card); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .brand { font-size: 24px; font-weight: 900; color: var(--red); text-transform: uppercase; }
         .burger { font-size: 24px; cursor: pointer; }
         
         .page { display: none; padding: 20px; animation: fadeIn 0.3s; }
@@ -112,23 +73,32 @@
         .xp-bar-fill { background: white; height: 100%; width: 0%; transition: 1s; }
 
         .bonus-card { background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--gold); }
-        .bonus-val { color: var(--gold); font-size: 24px; font-weight: bold; text-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+        .bonus-val { color: var(--gold); font-size: 24px; font-weight: bold; }
 
-        .trans-item { background: var(--card); padding: 10px; margin-bottom: 8px; border-radius: 10px; display: flex; justify-content: space-between; font-size: 12px; border-left: 3px solid #555; }
+        /* Transactions */
+        .trans-item { background: var(--card); padding: 10px; margin-bottom: 8px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; border-left: 3px solid #555; }
         .trans-plus { border-left-color: var(--green); }
         .trans-minus { border-left-color: var(--red); }
+        .trans-date { font-size: 10px; color: var(--gray); margin-top: 3px;}
         
         .warranty-item { background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 10px; border-left: 4px solid var(--green); position: relative; }
         .warranty-item.expired { border-left: 4px solid var(--gray); opacity: 0.6; }
         .item-dates { font-size: 10px; color: var(--gray); margin-top: 5px; display: flex; justify-content: space-between; }
 
-        /* General Inputs */
         input, select { width: 100%; padding: 12px; margin-bottom: 10px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: var(--red); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        button:active { transform: scale(0.98); opacity: 0.9; }
+        button { width: 100%; padding: 15px; background: var(--red); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:active { transform: scale(0.98); }
         
         .admin-section { display: none; }
         .admin-section.active { display: block; animation: fadeIn 0.3s; }
+        
+        /* Leaderboard */
+        .leader-item { background: var(--card); padding: 12px; margin-bottom: 8px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .rank-badge { width: 24px; height: 24px; border-radius: 50%; background: #444; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; margin-right: 10px; }
+        .rank-1 { background: var(--gold); color: #000; }
+        .rank-2 { background: silver; color: #000; }
+        .rank-3 { background: #cd7f32; color: #000; }
+
         .list-item-row { background: rgba(0,0,0,0.3); padding: 10px; margin-bottom: 5px; border-radius: 5px; display:flex; justify-content:space-between; align-items:center; font-size: 13px;}
         .btn-icon { background: rgba(255,255,255,0.1); width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 5px; margin-left: 5px; cursor: pointer; }
         .btn-red { background: rgba(255, 69, 58, 0.2); color: #ff453a; }
@@ -163,6 +133,7 @@
         <div class="sidebar-item" onclick="toggleSidebar()"><i class="fas fa-times"></i> Закрыть</div>
         <div class="sidebar-item" onclick="navTo('home')"><i class="fas fa-home"></i> Главная</div>
         <div class="sidebar-item" onclick="navTo('bonuses')"><i class="fas fa-gift"></i> Бонусы</div>
+        <div class="sidebar-item" onclick="navTo('leaderboard')"><i class="fas fa-trophy"></i> Лидерборд</div>
         <div class="sidebar-item" onclick="navTo('admin')"><i class="fas fa-user-shield" style="color: var(--red)"></i> Админ Панель</div>
     </div>
 
@@ -232,6 +203,14 @@
         <h3 style="margin-top:30px;">Транзакции</h3>
         <div id="history-trans-list"></div>
     </div>
+
+    <!-- LEADERBOARD -->
+    <div id="leaderboard" class="page">
+        <h2>🏆 Топ мажоров</h2>
+        <div id="leaderboard-list">
+            <p style="text-align:center;color:gray">Загрузка топа...</p>
+        </div>
+    </div>
     
     <!-- 4. ADMIN -->
     <div id="admin" class="page">
@@ -257,7 +236,7 @@
                 <div id="issue-form" style="display:none; border-top:1px solid rgba(255,255,255,0.1); padding-top:15px;">
                     <h4>Выдать товар: <span id="issue-target-name" style="color:var(--red)"></span></h4>
                     <input type="text" id="adm-issue-item" placeholder="Название">
-                    <input type="number" id="adm-issue-price" placeholder="Цена">
+                    <input type="number" id="adm-issue-price" placeholder="Цена (Покупка ₽)">
                     <div style="display:flex; gap:10px;">
                         <input type="number" id="adm-issue-dur" placeholder="Срок">
                         <select id="adm-issue-unit">
@@ -274,9 +253,9 @@
 
             <!-- PROMOS -->
             <div id="adm-tab-promos" class="admin-section">
-                <h4>Создать код</h4>
+                <h4>Создать код (Бонусы B)</h4>
                 <input type="text" id="promo-code" placeholder="Код">
-                <input type="number" id="promo-val" placeholder="Сумма">
+                <input type="number" id="promo-val" placeholder="Сумма бонусов">
                 <input type="number" id="promo-hours" placeholder="Часов действия">
                 <button onclick="adminCreatePromo()">Создать</button>
                 <div id="adm-promos-list" style="margin-top:15px;"></div>
@@ -306,7 +285,7 @@
             <h3>Редактирование</h3>
             <input type="hidden" id="edit-user-id"><input type="hidden" id="edit-item-id"><input type="hidden" id="edit-old-price">
             <label>Название:</label><input type="text" id="edit-name">
-            <label>Цена:</label><input type="number" id="edit-price">
+            <label>Цена (₽):</label><input type="number" id="edit-price">
             <label>Дата окончания:</label><input type="datetime-local" id="edit-date">
             <div style="display:flex; gap:10px; margin-top:10px;">
                 <button onclick="saveEditedItem()" style="background:var(--green)">Сохранить</button>
@@ -323,12 +302,10 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, increment, collection, query, where, getDocs, deleteDoc } 
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, increment, collection, query, where, getDocs, deleteDoc, orderBy, limit } 
         from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-        // ==========================================
-        //  ТВОИ ДАННЫЕ
-        // ==========================================
+        // CONFIG
         const MY_ADMIN_PASSWORD = "123"; 
 
         const firebaseConfig = {
@@ -339,7 +316,6 @@
              messagingSenderId: "55025016203",
              appId: "1:55025016203:web:8a6b67666dbb3df285238e"
         };
-        // ==========================================
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -380,7 +356,7 @@
             } catch(e) { 
                 console.error(e);
                 document.getElementById('error-screen').style.display = 'flex';
-                document.getElementById('error-screen').innerHTML = "Ошибка подключения к базе.<br>Проверь консоль.";
+                document.getElementById('error-screen').innerHTML = "Ошибка.<br>Проверь консоль.";
             }
         }
 
@@ -403,7 +379,7 @@
                 document.getElementById('ref-who').innerText = data.referrerId;
             }
 
-            // History
+            // History Items
             const listI = document.getElementById('history-items-list');
             listI.innerHTML = "";
             let active = 0;
@@ -425,8 +401,23 @@
             listT.innerHTML = "";
             if(data.transactions) {
                 [...data.transactions].reverse().forEach(t => {
-                    const css = t.amount>0 ? 'trans-plus' : 'trans-minus';
-                    listT.innerHTML += `<div class="trans-item ${css}"><div>${t.reason}</div><b>${t.amount>0?'+':''}${t.amount}</b></div>`;
+                    const isPlus = t.amount > 0;
+                    const css = isPlus ? 'trans-plus' : 'trans-minus';
+                    const dateStr = t.date ? new Date(t.date).toLocaleString('ru-RU', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'}) : '';
+                    
+                    // Determine currency based on type OR reason
+                    let currency = '₽';
+                    if(t.currency) currency = t.currency;
+                    else if(t.reason.includes('Код')) currency = 'B';
+                    
+                    listT.innerHTML += `
+                    <div class="trans-item ${css}">
+                        <div style="display:flex; flex-direction:column;">
+                            <span>${t.reason}</span>
+                            <span class="trans-date">${dateStr}</span>
+                        </div>
+                        <b style="font-size:14px;">${isPlus?'+':''}${t.amount} ${currency}</b>
+                    </div>`;
                 });
             }
         }
@@ -440,6 +431,7 @@
             });
             document.getElementById('sidebar').classList.remove('active');
             document.querySelector('.sidebar-overlay').style.display='none';
+            if(id === 'leaderboard') loadLeaderboard();
         }
         window.toggleSidebar = () => {
             const sb = document.getElementById('sidebar');
@@ -458,7 +450,7 @@
             if(new Date() > new Date(d.expiresAt)) return alert("Истек");
             if(d.users && d.users.includes(myUserId.toString())) return alert("Уже был");
 
-            const trans = { amount: d.value, reason: `Код ${c}`, date: new Date().toISOString() };
+            const trans = { amount: d.value, reason: `Код ${c}`, date: new Date().toISOString(), currency: 'B' };
             await updateDoc(ref, { users: arrayUnion(myUserId.toString()) });
             await updateDoc(doc(db,"users",myUserId.toString()), { 
                 bonusBalance: increment(d.value), transactions: arrayUnion(trans) 
@@ -520,7 +512,28 @@
         async function loadPromos() {
             const d = document.getElementById('adm-promos-list'); d.innerHTML="";
             (await getDocs(collection(db,"promocodes"))).forEach(x => {
-                d.innerHTML += `<div class="list-item-row"><span>${x.id} (${x.data().value})</span><div class="btn-icon btn-red" onclick="delPromo('${x.id}')"><i class="fas fa-trash"></i></div></div>`;
+                const data = x.data();
+                const now = new Date();
+                const exp = new Date(data.expiresAt);
+                let timerText = "";
+                
+                if (now > exp) {
+                    timerText = `<span style="color:red">Истек</span>`;
+                } else {
+                    const diffMs = exp - now;
+                    const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
+                    const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+                    timerText = `<span style="color:lime">${diffHrs}ч ${diffMins}м</span>`;
+                }
+
+                d.innerHTML += `
+                <div class="list-item-row">
+                    <div>
+                        <b>${x.id}</b> (${data.value} B)<br>
+                        ${timerText}
+                    </div>
+                    <div class="btn-icon btn-red" onclick="delPromo('${x.id}')"><i class="fas fa-trash"></i></div>
+                </div>`;
             });
         }
         window.adminCreatePromo = async () => {
@@ -533,7 +546,34 @@
         }
         window.delPromo = async (id) => { if(confirm("Del?")) { await deleteDoc(doc(db,"promocodes",id)); loadPromos(); }};
 
-        // Users
+        // Users & Leaderboard
+        window.loadLeaderboard = async () => {
+            const list = document.getElementById('leaderboard-list');
+            list.innerHTML = "Загрузка...";
+            try {
+                const q = query(collection(db, "users"), orderBy("spent", "desc"), limit(10));
+                const snap = await getDocs(q);
+                list.innerHTML = "";
+                let i = 1;
+                snap.forEach(d => {
+                    const u = d.data();
+                    let badge = i===1?'rank-1':(i===2?'rank-2':(i===3?'rank-3':''));
+                    list.innerHTML += `
+                    <div class="leader-item">
+                        <div style="display:flex; align-items:center;">
+                            <div class="rank-badge ${badge}">${i}</div>
+                            <b>${u.name||'User'}</b>
+                        </div>
+                        <span style="color:gold">${u.spent}₽</span>
+                    </div>`;
+                    i++;
+                });
+            } catch(e) {
+                console.log(e);
+                list.innerHTML = `<p style="color:red; font-size:12px">Ошибка индекса (см консоль)</p>`;
+            }
+        }
+
         let fUid = null;
         window.adminFindUser = async () => {
             const n = document.getElementById('adm-search-user').value.toLowerCase().trim().replace("@","");
@@ -568,7 +608,7 @@
             if(unit==='years') d.setFullYear(d.getFullYear()+dur);
 
             const newItem = { id: Date.now().toString()+Math.random().toString().slice(2), name: nm, price: pr, date: new Date().toISOString(), expiryDate: d.toISOString() };
-            const trans = { amount: pr, reason: "Покупка: "+nm, date: new Date().toISOString() };
+            const trans = { amount: pr, reason: "Покупка: "+nm, date: new Date().toISOString(), currency: '₽' };
             
             await updateDoc(doc(db,"users",fUid), { items: arrayUnion(newItem), spent: increment(pr), transactions: arrayUnion(trans) });
             alert("ОК"); adminFindUser();
@@ -613,7 +653,7 @@
                 const r = doc(db,"users",uid);
                 const s = await getDoc(r);
                 const arr = s.data().items.filter(x => x.id !== iid);
-                const trans = { amount: -p, reason: "Удаление", date: new Date().toISOString() };
+                const trans = { amount: -p, reason: "Удаление", date: new Date().toISOString(), currency: '₽' };
                 await updateDoc(r, { items: arr, spent: increment(-p), transactions: arrayUnion(trans) });
                 adminFindUser();
             }
