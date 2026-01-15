@@ -41,6 +41,8 @@
         /* Inputs */
         input, select { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box; }
         button { width: 100%; padding: 15px; background: var(--red); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        
+        .admin-section { border: 1px solid #333; padding: 15px; border-radius: 15px; margin-bottom: 20px; }
 
         /* Nav */
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--card); display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #333; }
@@ -70,11 +72,15 @@
         <div class="level-card">
             <div>ВАШ УРОВЕНЬ: <span id="lvl-display">1</span></div>
             <div class="discount-big" id="discount-display">5%</div>
+            
             <div class="xp-bar-bg"><div class="xp-bar-fill" id="xp-fill"></div></div>
+            
             <div style="display:flex; justify-content:space-between; margin-top:5px; font-size:12px;">
-                <span id="xp-current">0</span> <span id="xp-next">100</span>
+                <span id="rub-current">0₽</span> <span id="rub-next">100 000₽</span>
             </div>
+            <div style="font-size: 10px; opacity: 0.7; margin-top: 5px;">до следующей скидки</div>
         </div>
+
         <h3>Статистика</h3>
         <div class="stats-grid">
             <div class="stat-box">
@@ -98,25 +104,26 @@
     <!-- ADMIN -->
     <div id="admin" class="page">
         <h2 style="color: var(--red)">Админ Панель</h2>
-        <p style="font-size:12px; color:gray;">Управление базой данных Firebase</p>
+        <p style="font-size:12px; color:gray; margin-bottom: 15px;">Только для администратора</p>
         
-        <label>ID Пользователя (кому выдать):</label>
-        <input type="number" id="adm-target-id" placeholder="Например: 123456789">
-        
-        <h4>Начислить опыт</h4>
-        <input type="number" id="adm-xp" placeholder="XP (100 = 1 уровень)">
-        <button onclick="adminGiveXP()" style="margin-bottom:20px;">Выдать опыт</button>
+        <div class="admin-section">
+            <label>1. Пароль администратора:</label>
+            <input type="password" id="adm-password" placeholder="Введите пароль">
+        </div>
 
-        <h4>Выдать товар</h4>
-        <input type="text" id="adm-item" placeholder="Товар (Spotify)">
-        <input type="number" id="adm-price" placeholder="Цена (RUB)">
-        <select id="adm-warranty">
-            <option>Навсегда</option>
-            <option>30 Дней</option>
-        </select>
-        <button onclick="adminGiveItem()">Выдать товар</button>
+        <div class="admin-section">
+            <label>2. Кому выдать (@username):</label>
+            <input type="text" id="adm-username" placeholder="Пример: durov (без @)">
+            
+            <label>3. Данные о покупке:</label>
+            <input type="text" id="adm-item" placeholder="Название товара">
+            <input type="number" id="adm-price" placeholder="Цена (RUB)">
+            <input type="text" id="adm-warranty" placeholder="Срок гарантии (текстом)">
+            
+            <button onclick="adminGiveItem()">Выдать и сохранить</button>
+        </div>
         
-        <p style="margin-top:20px; font-size:12px;">Мой ID: <span id="my-id-hint">...</span></p>
+        <p style="font-size:11px; color:gray;">* Уровень повышается автоматически при достижении суммы.</p>
     </div>
 
     <nav class="bottom-nav">
@@ -127,10 +134,17 @@
     <!-- FIREBASE SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, increment } 
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, increment, collection, query, where, getDocs } 
         from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-        // --- 1. НАСТРОЙКИ FIREBASE (Вставь свои данные ниже) ---
+        // ==========================================
+        //  НАСТРОЙКИ (РЕДАКТИРУЙ ЭТО)
+        // ==========================================
+        
+        // 1. ПАРОЛЬ АДМИНИСТРАТОРА
+        const MY_ADMIN_PASSWORD = "5815"; // <--- Придумай свой пароль и впиши сюда
+        
+        // 2. КОНФИГ FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyDFrEbOwmtZlWlrPhImDlA0PE1tQKvYNAY",
             authDomain: "rakstore-a80a8.firebaseapp.com",
@@ -139,6 +153,7 @@
             messagingSenderId: "55025016203",
             appId: "1:55025016203:web:8a6b67666dbb3df285238e"
         };
+        // ==========================================
 
         // Инициализация
         const app = initializeApp(firebaseConfig);
@@ -146,51 +161,71 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        let myUserId = tg.initDataUnsafe?.user?.id || 11111; // 11111 для тестов в браузере
+        // Данные текущего пользователя
+        let myUserId = tg.initDataUnsafe?.user?.id || 11111; 
+        let myUsername = tg.initDataUnsafe?.user?.username || "unknown";
         let myName = tg.initDataUnsafe?.user?.first_name || "Guest";
+        
+        // Приводим никнейм к нижнему регистру для поиска
+        if(myUsername) myUsername = myUsername.toLowerCase();
 
-        document.getElementById('my-id-hint').innerText = myUserId;
-        document.getElementById('adm-target-id').value = myUserId; // Автозаполнение собой
+        // --- ЛОГИКА ---
 
-        // --- 2. ЛОГИКА ---
-
-        // Загрузка данных пользователя
         async function loadUser() {
             const userRef = doc(db, "users", myUserId.toString());
             const userSnap = await getDoc(userRef);
 
             if (userSnap.exists()) {
+                // Если юзер есть, обновляем ему username (вдруг сменил)
+                if (userSnap.data().username !== myUsername) {
+                    updateDoc(userRef, { username: myUsername });
+                }
                 renderUI(userSnap.data());
             } else {
-                // Новый юзер - создаем запись
-                const newUser = { name: myName, xp: 0, spent: 0, items: [] };
+                // Новый юзер
+                const newUser = { 
+                    name: myName, 
+                    username: myUsername, // Сохраняем username для поиска
+                    spent: 0, 
+                    items: [] 
+                };
                 await setDoc(userRef, newUser);
                 renderUI(newUser);
             }
             document.getElementById('loading-text').style.display = 'none';
         }
 
-        // Отрисовка интерфейса
         function renderUI(data) {
-            // Уровни
-            let level = Math.floor(data.xp / 100) + 1;
-            let discount = level * 5;
-            let currentXp = data.xp % 100;
+            // Расчет уровня: каждые 100,000 руб
+            const RUB_PER_LEVEL = 100000;
+            
+            let spent = data.spent || 0;
+            // Уровень 1 (0-99k), Уровень 2 (100k-199k) и т.д.
+            let level = Math.floor(spent / RUB_PER_LEVEL) + 1;
+            let discount = level * 5; // Скидка
+            
+            // Прогресс бар
+            let currentLevelProgress = spent % RUB_PER_LEVEL;
+            let percent = (currentLevelProgress / RUB_PER_LEVEL) * 100;
 
+            // Отображение
             document.getElementById('lvl-display').innerText = level;
             document.getElementById('discount-display').innerText = discount + "%";
-            document.getElementById('xp-fill').style.width = currentXp + "%";
-            document.getElementById('xp-current').innerText = currentXp + " XP";
+            
+            document.getElementById('xp-fill').style.width = percent + "%";
+            document.getElementById('rub-current').innerText = currentLevelProgress.toLocaleString() + "₽";
+            document.getElementById('rub-next').innerText = RUB_PER_LEVEL.toLocaleString() + "₽"; // Всегда 100к шаг
             
             // Статистика
             document.getElementById('stat-count').innerText = data.items ? data.items.length : 0;
-            document.getElementById('stat-spent').innerText = data.spent + "₽";
+            document.getElementById('stat-spent').innerText = spent.toLocaleString() + "₽";
 
             // История
             const list = document.getElementById('history-list');
             list.innerHTML = "";
             if(data.items && data.items.length > 0) {
-                data.items.forEach(item => {
+                // Сортируем: новые сверху
+                [...data.items].reverse().forEach(item => {
                     list.innerHTML += `
                     <div class="warranty-item">
                         <div style="display:flex; justify-content:space-between">
@@ -202,53 +237,76 @@
                     </div>`;
                 });
             } else {
-                list.innerHTML = "<p>Покупок нет</p>";
+                list.innerHTML = "<p style='text-align:center; color:gray'>Покупок нет</p>";
             }
         }
 
-        // --- 3. АДМИН ФУНКЦИИ (Доступны всем в коде, но скрыты в интерфейсе) ---
+        // --- АДМИН ФУНКЦИЯ (ВЫДАЧА ПО @USERNAME) ---
         
-        // Сделаем функции доступными глобально для кнопок HTML
-        window.adminGiveXP = async () => {
-            let targetId = document.getElementById('adm-target-id').value;
-            let amount = parseInt(document.getElementById('adm-xp').value);
-            if(!targetId || !amount) return alert("Заполните поля");
-
-            const userRef = doc(db, "users", targetId.toString());
-            try {
-                await updateDoc(userRef, {
-                    xp: increment(amount)
-                });
-                alert("Успешно! Обновите приложение получателя.");
-                if(targetId == myUserId) loadUser(); // Обновить себе сразу
-            } catch(e) { alert("Ошибка: Юзер не найден в базе"); console.error(e); }
-        }
-
         window.adminGiveItem = async () => {
-            let targetId = document.getElementById('adm-target-id').value;
+            // 1. Проверка пароля
+            let enteredPass = document.getElementById('adm-password').value;
+            if (enteredPass !== MY_ADMIN_PASSWORD) {
+                return alert("Неверный пароль администратора!");
+            }
+
+            // 2. Сбор данных
+            let rawUsername = document.getElementById('adm-username').value.trim();
             let name = document.getElementById('adm-item').value;
             let price = parseInt(document.getElementById('adm-price').value);
             let warranty = document.getElementById('adm-warranty').value;
 
-            if(!targetId || !name) return alert("Заполните поля");
+            if(!rawUsername || !name || !price || !warranty) return alert("Заполните все поля");
 
-            const newItem = { name, price, warranty, date: new Date().toISOString() };
-            const userRef = doc(db, "users", targetId.toString());
+            // Очистка никнейма от @ и пробелов, перевод в нижний регистр
+            let targetUsername = rawUsername.replace("@", "").toLowerCase();
 
+            // 3. Поиск пользователя по username в базе
             try {
+                const usersRef = collection(db, "users");
+                // Ищем документ, где поле username == targetUsername
+                const q = query(usersRef, where("username", "==", targetUsername));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    return alert(`Пользователь @${targetUsername} не найден! Он должен зайти в бот хотя бы один раз.`);
+                }
+
+                // 4. Начисление (берем первого найденного)
+                let userDoc = querySnapshot.docs[0];
+                let userRef = doc(db, "users", userDoc.id);
+
+                const newItem = { 
+                    name, 
+                    price, 
+                    warranty, 
+                    date: new Date().toISOString() 
+                };
+
                 await updateDoc(userRef, {
                     items: arrayUnion(newItem),
-                    spent: increment(price)
+                    spent: increment(price) // Автоматически увеличивает потраченное -> повышает уровень
                 });
-                alert("Товар выдан!");
-                if(targetId == myUserId) loadUser();
-            } catch(e) { alert("Ошибка при выдаче"); console.error(e); }
+
+                alert(`Успешно выдано пользователю @${targetUsername}!`);
+                
+                // Очистка полей
+                document.getElementById('adm-item').value = '';
+                document.getElementById('adm-price').value = '';
+
+                // Если выдали себе, обновляем экран
+                if(userDoc.id == myUserId.toString()) loadUser();
+
+            } catch(e) { 
+                alert("Ошибка базы данных. Проверьте консоль."); 
+                console.error(e); 
+            }
         }
 
         // Запуск
         loadUser();
 
-        // --- UI ФУНКЦИИ ---
+        // UI функции
         window.toggleSidebar = () => {
             const sb = document.getElementById('sidebar');
             const ov = document.querySelector('.sidebar-overlay');
