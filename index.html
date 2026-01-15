@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RakStore</title>
+    <!-- Подключаем файл со стилями -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Подключаем библиотеку иконок (для будущего использования) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <!-- Шапка с названием и переключателем тем -->
+    <header>
+        <h1>RakStore</h1>
+        <div class="theme-switcher">
+            <button data-theme="light" class="active">☀️</button>
+            <button data-theme="dark">🌙</button>
+            <button data-theme="blue">💧</button>
+        </div>
+    </header>
+
+    <!-- Навигационное меню -->
+    <nav>
+        <button id="nav-purchases" class="nav-btn active" data-page="page-purchases">🛍️ Покупки</button>
+        <button id="nav-warranties" class="nav-btn" data-page="page-warranties">🛡️ Гарантии</button>
+        <button id="nav-profile" class="nav-btn" data-page="page-profile">👤 Профиль</button>
+        <button id="nav-help" class="nav-btn" data-page="page-help">❓ Помощь</button>
+    </nav>
+
+    <main>
+        <!-- СТРАНИЦА 1: ПОКУПКИ -->
+        <div id="page-purchases" class="page active">
+            <h2>Мои покупки</h2>
+            <div id="purchases-list-container">
+                <!-- Сюда будет вставлен скелетон или список покупок -->
+            </div>
+        </div>
+
+        <!-- СТРАНИЦА 2: ГАРАНТИИ -->
+        <div id="page-warranties" class="page">
+            <h2>Мои гарантии</h2>
+            <p>Здесь будет список товаров с активной гарантией и таймерами.</p>
+            <!-- Сюда будет вставлен контент раздела гарантий -->
+        </div>
+
+        <!-- СТРАНИЦА 3: ПРОФИЛЬ -->
+        <div id="page-profile" class="page">
+            <h2>Профиль пользователя</h2>
+            <div id="profile-content">
+                <p>Здесь будет аватар, статистика, ачивки и настройки.</p>
+            </div>
+        </div>
+
+        <!-- СТРАНИЦА 4: ПОМОЩЬ -->
+        <div id="page-help" class="page">
+            <h2>Помощь и поддержка</h2>
+            <p>Здесь будет FAQ, форма для репорта и чат с поддержкой.</p>
+        </div>
+    </main>
+
+    <!-- Кнопка "Наверх" -->
+    <button id="scrollTopBtn" title="Наверх">🔝</button>
+
+    <!-- Модальное окно для анонсов -->
+    <div id="news-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>🔥 Горячие новости!</h3>
+            <p>У нас стартовала новая акция! Успейте принять участие.</p>
+        </div>
+    </div>
+
+    <!-- Подключение Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <!-- Подключение файла с логикой -->
+    <script src="script.js"></script>
+
+</body>
+</html>
