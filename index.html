@@ -170,7 +170,7 @@
         from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         // ==========================================
-        //  НАСТРОЙКИ
+        //  НАСТРОЙКИ (ВНЕСИ СВОИ ДАННЫЕ)
         // ==========================================
         const MY_ADMIN_PASSWORD = "5815"; // <--- ТВОЙ ПАРОЛЬ
         
@@ -313,9 +313,12 @@
 
                 let userDoc = querySnapshot.docs[0];
                 
-                // Create Item Object
+                // ГЕНЕРАЦИЯ УНИКАЛЬНОГО ID (Исправлено)
+                // Добавляем случайное число, чтобы ID были уникальны даже при быстром добавлении
+                const uniqueId = Date.now().toString() + Math.random().toString(36).substr(2, 9);
+
                 const newItem = {
-                    id: Date.now(), // Unique ID for deletion
+                    id: uniqueId, 
                     name,
                     price,
                     date: new Date().toISOString(),
@@ -329,14 +332,13 @@
                 });
 
                 alert("Товар выдан!");
-                // Clear form
                 document.getElementById('adm-item').value = "";
                 if(userDoc.id == myUserId.toString()) loadUser();
 
             } catch(e) { console.error(e); alert("Ошибка базы данных"); }
         }
 
-        // Find User & Show Items for Deletion
+        // Find User
         window.adminFindUser = async () => {
             let targetUser = document.getElementById('adm-search-user').value.trim().replace("@", "").toLowerCase();
             const container = document.getElementById('adm-user-items');
@@ -363,15 +365,16 @@
 
                 let html = `<p>Покупки пользователя <b>${userData.name}</b>:</p>`;
                 
-                // Render list with Delete buttons
-                userData.items.forEach((item, index) => {
+                // Рендерим список с кнопкой удаления
+                // Важно: передаем ID товара как строку
+                userData.items.forEach((item) => {
                     html += `
                     <div style="background: #222; padding: 10px; margin-bottom: 5px; border-radius: 5px; display:flex; justify-content:space-between; align-items:center;">
                         <div>
                             <b>${item.name}</b> (${item.price}₽)<br>
                             <span style="font-size:10px; color:gray">До: ${new Date(item.expiryDate).toLocaleDateString()}</span>
                         </div>
-                        <button class="btn-delete" onclick="adminDeleteItem('${userId}', ${item.id}, ${item.price})">
+                        <button class="btn-delete" onclick="adminDeleteItem('${userId}', '${item.id}', ${item.price})">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>`;
@@ -381,7 +384,7 @@
             } catch(e) { console.error(e); }
         }
 
-        // Delete Item Function
+        // УДАЛЕНИЕ (ИСПРАВЛЕННАЯ ФУНКЦИЯ)
         window.adminDeleteItem = async (userId, itemId, itemPrice) => {
             if(!confirm("Удалить эту покупку? Сумма потраченного уменьшится.")) return;
 
@@ -390,18 +393,31 @@
                 const userSnap = await getDoc(userRef);
                 const userData = userSnap.data();
 
-                // Filter out the item
-                const updatedItems = userData.items.filter(i => i.id !== itemId);
-                
-                // Update DB
-                await updateDoc(userRef, {
-                    items: updatedItems,
-                    spent: increment(-itemPrice) // Subtract money
-                });
+                // Преобразуем цену в число, чтобы точно сработало вычитание
+                const priceToDeduct = Number(itemPrice);
 
-                alert("Покупка удалена!");
-                document.getElementById('adm-user-items').innerHTML = ""; // Clear list
-                if(userId == myUserId.toString()) loadUser(); // Refresh self if needed
+                // ИСПРАВЛЕННАЯ ЛОГИКА УДАЛЕНИЯ:
+                // Мы ищем индекс элемента с нужным ID и удаляем ровно ОДИН элемент
+                const index = userData.items.findIndex(i => String(i.id) === String(itemId));
+                
+                if (index > -1) {
+                    // Удаляем 1 элемент по индексу
+                    userData.items.splice(index, 1);
+                    
+                    // Обновляем базу: перезаписываем массив и вычитаем сумму
+                    await updateDoc(userRef, {
+                        items: userData.items,
+                        spent: increment(-priceToDeduct) 
+                    });
+
+                    alert("Покупка удалена корректно!");
+                    document.getElementById('adm-user-items').innerHTML = "Список обновляется..."; 
+                    
+                    // Обновляем интерфейс (если удалили у себя)
+                    if(userId == myUserId.toString()) loadUser(); 
+                } else {
+                    alert("Ошибка: Товар не найден (возможно уже удален).");
+                }
 
             } catch(e) { console.error(e); alert("Ошибка удаления"); }
         }
