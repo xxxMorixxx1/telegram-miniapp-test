@@ -2,81 +2,154 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>RakStore</title>
     <!-- Подключаем файл со стилями -->
     <link rel="stylesheet" href="style.css">
-    <!-- Подключаем библиотеку иконок (для будущего использования) -->
+    <!-- Подключаем библиотеку иконок Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 
-    <!-- Шапка с названием и переключателем тем -->
+    <!-- Шапка -->
     <header>
         <h1>RakStore</h1>
-        <div class="theme-switcher">
-            <button data-theme="light" class="active">☀️</button>
-            <button data-theme="dark">🌙</button>
-            <button data-theme="blue">💧</button>
-        </div>
+        <!-- Кнопка входа в админку -->
+        <button id="admin-login-btn"><i class="fa-solid fa-lock"></i></button>
     </header>
-
-    <!-- Навигационное меню -->
-    <nav>
-        <button id="nav-purchases" class="nav-btn active" data-page="page-purchases">🛍️ Покупки</button>
-        <button id="nav-warranties" class="nav-btn" data-page="page-warranties">🛡️ Гарантии</button>
-        <button id="nav-profile" class="nav-btn" data-page="page-profile">👤 Профиль</button>
-        <button id="nav-help" class="nav-btn" data-page="page-help">❓ Помощь</button>
-    </nav>
 
     <main>
         <!-- СТРАНИЦА 1: ПОКУПКИ -->
         <div id="page-purchases" class="page active">
             <h2>Мои покупки</h2>
             <div id="purchases-list-container">
-                <!-- Сюда будет вставлен скелетон или список покупок -->
+                <!-- Сюда будут генерироваться покупки из script.js -->
             </div>
         </div>
 
         <!-- СТРАНИЦА 2: ГАРАНТИИ -->
         <div id="page-warranties" class="page">
             <h2>Мои гарантии</h2>
-            <p>Здесь будет список товаров с активной гарантией и таймерами.</p>
-            <!-- Сюда будет вставлен контент раздела гарантий -->
+            <div id="warranties-container">
+                <p style="text-align:center; color:#888">Раздел в разработке.</p>
+            </div>
         </div>
 
         <!-- СТРАНИЦА 3: ПРОФИЛЬ -->
         <div id="page-profile" class="page">
-            <h2>Профиль пользователя</h2>
+            <h2>Профиль</h2>
             <div id="profile-content">
-                <p>Здесь будет аватар, статистика, ачивки и настройки.</p>
+                <!-- Карточка пользователя -->
+                <div class="profile-card">
+                    <img id="profile-avatar" src="https://t.me/i/userpic/320/null.jpg" alt="Avatar">
+                    <h3 id="profile-name">Загрузка...</h3>
+                    <div class="profile-level">
+                        <span>Уровень <span id="profile-level-num">1</span></span>
+                        <div class="progress-bar">
+                            <div id="profile-level-progress"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Статистика -->
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="stat-purchases">0</span>
+                        <span class="stat-label">Покупок</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="stat-spent">0 ₽</span>
+                        <span class="stat-label">Потрачено</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="stat-points">0</span>
+                        <span class="stat-label">Баллов</span>
+                    </div>
+                </div>
+
+                <!-- Достижения -->
+                <h3>🏆 Достижения</h3>
+                <div id="achievements-grid" class="achievements-grid">
+                    <!-- Ачивки будут генерироваться здесь -->
+                </div>
             </div>
         </div>
 
         <!-- СТРАНИЦА 4: ПОМОЩЬ -->
         <div id="page-help" class="page">
-            <h2>Помощь и поддержка</h2>
-            <p>Здесь будет FAQ, форма для репорта и чат с поддержкой.</p>
+            <h2>Помощь</h2>
+            <p style="text-align:center; color:#888">Свяжитесь с нами, если возникли проблемы.</p>
+        </div>
+
+        <!-- СТРАНИЦА 5: АДМИН-ПАНЕЛЬ (Скрыта по умолчанию) -->
+        <div id="page-admin" class="page">
+            <h2>👑 Админ Панель</h2>
+            
+            <!-- Форма входа -->
+            <div id="admin-auth-block">
+                <input type="password" id="admin-password-input" placeholder="Введите пароль админа">
+                <button onclick="loginAdmin()">Войти</button>
+                <p id="auth-error" style="color:red; display:none;">Неверный пароль!</p>
+            </div>
+
+            <!-- Контент админки (скрыт до входа) -->
+            <div id="admin-panel-content" style="display: none;">
+                
+                <div class="admin-section">
+                    <h3>🎨 Управление интерфейсом</h3>
+                    <p>Изменить тему для ВСЕХ пользователей:</p>
+                    <div class="theme-switcher">
+                        <button onclick="setGlobalTheme('light')">☀️ Светлая</button>
+                        <button onclick="setGlobalTheme('dark')">🌙 Темная</button>
+                        <button onclick="setGlobalTheme('blue')">💧 Синяя</button>
+                    </div>
+                </div>
+
+                <div class="admin-section">
+                    <h3>➕ Добавить покупку пользователю</h3>
+                    <input type="text" id="adm-user-id" placeholder="ID пользователя (например: user1)">
+                    <input type="text" id="adm-item-name" placeholder="Название товара">
+                    <input type="number" id="adm-item-price" placeholder="Цена">
+                    <input type="date" id="adm-item-date">
+                    <input type="text" id="adm-item-cat" placeholder="Категория (electronics, books...)">
+                    <button onclick="adminAddPurchase()">Добавить покупку</button>
+                </div>
+
+                <div class="admin-section">
+                    <h3>🔐 Безопасность</h3>
+                    <input type="text" id="new-admin-password" placeholder="Новый пароль админа">
+                    <button onclick="changeAdminPassword()">Сменить пароль</button>
+                </div>
+
+                <button onclick="logoutAdmin()" class="logout-btn">Выйти</button>
+            </div>
         </div>
     </main>
 
-    <!-- Кнопка "Наверх" -->
-    <button id="scrollTopBtn" title="Наверх">🔝</button>
+    <!-- Нижняя навигация -->
+    <nav class="bottom-nav">
+        <button class="nav-btn active" data-page="page-purchases">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <span>Покупки</span>
+        </button>
+        <button class="nav-btn" data-page="page-warranties">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Гарантии</span>
+        </button>
+        <button class="nav-btn" data-page="page-profile">
+            <i class="fa-solid fa-user"></i>
+            <span>Профиль</span>
+        </button>
+        <button class="nav-btn" data-page="page-help">
+            <i class="fa-solid fa-circle-question"></i>
+            <span>Помощь</span>
+        </button>
+    </nav>
 
-    <!-- Модальное окно для анонсов -->
-    <div id="news-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h3>🔥 Горячие новости!</h3>
-            <p>У нас стартовала новая акция! Успейте принять участие.</p>
-        </div>
-    </div>
-
-    <!-- Подключение Firebase -->
+    <!-- Подключение скриптов -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <!-- Подключение файла с логикой -->
     <script src="script.js"></script>
-
 </body>
 </html>
