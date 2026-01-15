@@ -9,9 +9,32 @@
     
     <style>
         :root { --bg: #1c1c1e; --card: #2c2c2e; --text: #fff; --red: #ff3b30; --green: #30d158; --gray: #8e8e93; --gold: #ffd700; }
-        body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding-bottom: 80px; overflow-x: hidden; }
+        body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding-bottom: 80px; overflow-x: hidden; transition: background 0.5s; }
         
-        /* General */
+        /* --- SEASONAL MODES CSS --- */
+        /* Snow (New Year) */
+        .snow-flake { position: fixed; color: white; top: -10px; animation: fall linear infinite; z-index: 50; pointer-events: none; opacity: 0.8; }
+        @keyframes fall { to { transform: translateY(105vh); } }
+        
+        /* Halloween */
+        body.mode-halloween { background: #1a0500; --red: #ff6600; --card: #2d1405; }
+        .ghost { position: fixed; color: rgba(255,255,255,0.1); animation: floatGhost 10s infinite linear; z-index: 1; pointer-events: none; font-size: 40px; }
+        @keyframes floatGhost { 0% { transform: translate(-10vw, 100vh); } 100% { transform: translate(110vw, -10vh); } }
+
+        /* Autumn */
+        body.mode-autumn { background: #1a1000; --green: #d48806; }
+        .leaf { position: fixed; color: #d48806; animation: fallRotate 8s linear infinite; z-index: 50; pointer-events: none; }
+        @keyframes fallRotate { 0% { transform: translateY(-10vh) rotate(0deg); } 100% { transform: translateY(105vh) rotate(360deg); } }
+
+        /* Summer */
+        body.mode-summer { background: #001a1a; --red: #ffcc00; }
+        .sun-flare { position: fixed; top: -50px; right: -50px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,204,0,0.4) 0%, rgba(0,0,0,0) 70%); z-index: 0; pointer-events: none; }
+
+        /* Spring */
+        body.mode-spring { background: #0f1a15; --red: #ff69b4; }
+        .flower { position: fixed; color: #ff69b4; animation: fall 12s linear infinite; z-index: 50; pointer-events: none; font-size: 10px; }
+
+        /* --- UI ELEMENTS --- */
         header { display: flex; justify-content: space-between; padding: 15px 20px; background: var(--card); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
         .brand { font-size: 24px; font-weight: 900; color: var(--red); text-transform: uppercase; }
         .burger { font-size: 24px; cursor: pointer; }
@@ -20,33 +43,33 @@
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Tabs inside Admin */
+        /* Admin Tabs */
         .admin-tabs { display: flex; gap: 10px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
         .admin-tab { background: #333; padding: 8px 15px; border-radius: 20px; font-size: 12px; white-space: nowrap; cursor: pointer; }
         .admin-tab.active { background: var(--red); color: white; }
 
-        /* Cards & Lists */
-        .level-card { background: linear-gradient(135deg, #ff3b30, #ff9f0a); padding: 20px; border-radius: 20px; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 15px rgba(255, 59, 48, 0.4); }
+        /* Cards */
+        .level-card { background: linear-gradient(135deg, var(--red), #ff9f0a); padding: 20px; border-radius: 20px; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 15px rgba(255, 59, 48, 0.4); }
         .xp-bar-bg { background: rgba(0,0,0,0.2); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 10px; }
         .xp-bar-fill { background: white; height: 100%; width: 0%; transition: 1s; }
 
-        .catalog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .product-card { background: var(--card); border-radius: 15px; overflow: hidden; display: flex; flex-direction: column; }
-        .product-img { width: 100%; height: 120px; object-fit: cover; background: #333; }
-        .product-info { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; }
-        .btn-buy { margin-top: auto; background: var(--red); color: white; border: none; padding: 8px; border-radius: 8px; font-size: 12px; width: 100%; cursor: pointer; }
+        .bonus-card { background: #333; padding: 15px; border-radius: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--gold); }
+        .bonus-val { color: var(--gold); font-size: 24px; font-weight: bold; }
 
+        /* Lists */
+        .trans-item { background: var(--card); padding: 10px; margin-bottom: 8px; border-radius: 10px; display: flex; justify-content: space-between; font-size: 13px; border-left: 3px solid #555; }
+        .trans-plus { border-left-color: var(--green); }
+        .trans-minus { border-left-color: var(--red); }
+        
         .warranty-item { background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 10px; border-left: 4px solid var(--green); position: relative; }
         .warranty-item.expired { border-left: 4px solid var(--gray); opacity: 0.6; }
         .item-dates { font-size: 10px; color: var(--gray); margin-top: 5px; display: flex; justify-content: space-between; }
 
-        /* Inputs & Admin */
         input, select { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box; }
         button { width: 100%; padding: 15px; background: var(--red); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
         
-        .admin-section { display: none; } /* Скрыты по умолчанию, переключаются табами */
+        .admin-section { display: none; }
         .admin-section.active { display: block; animation: fadeIn 0.3s; }
-        
         .list-item-row { background: #222; padding: 10px; margin-bottom: 5px; border-radius: 5px; display:flex; justify-content:space-between; align-items:center; font-size: 13px;}
         .btn-icon { background: #444; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 5px; margin-left: 5px; cursor: pointer; }
         .btn-red { background: #ff453a; }
@@ -61,13 +84,14 @@
         .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: gray; transition: 0.2s; cursor: pointer; width: 25%; }
         .nav-item.active { color: var(--red); }
         .nav-item i { font-size: 18px; margin-bottom: 4px; }
-
-        /* Modal for Editing */
+        
+        /* Modal */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 300; align-items: center; justify-content: center; padding: 20px; }
         .modal-content { background: var(--card); padding: 20px; border-radius: 15px; width: 100%; max-width: 350px; }
     </style>
 </head>
 <body>
+    <div id="seasonal-container"></div> <!-- Контейнер для эффектов -->
 
     <header>
         <div class="brand">RakStore</div>
@@ -78,7 +102,7 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-item" onclick="toggleSidebar()"><i class="fas fa-times"></i> Закрыть</div>
         <div class="sidebar-item" onclick="navTo('home')"><i class="fas fa-home"></i> Главная</div>
-        <div class="sidebar-item" onclick="navTo('leaderboard')"><i class="fas fa-trophy"></i> Лидерборд</div>
+        <div class="sidebar-item" onclick="navTo('bonuses')"><i class="fas fa-gift"></i> Бонусы</div>
         <div class="sidebar-item" onclick="navTo('admin')"><i class="fas fa-user-shield" style="color: var(--red)"></i> Админ Панель</div>
     </div>
 
@@ -112,61 +136,49 @@
         </div>
     </div>
 
-    <!-- 2. CATALOG (Dynamic) -->
-    <div id="catalog" class="page">
-        <h2>Витрина</h2>
-        <div class="catalog-grid" id="catalog-list">
-            <p style="color:gray">Загрузка товаров...</p>
-        </div>
-    </div>
-
-    <!-- 3. BONUSES (Promo & Refs) -->
+    <!-- 2. BONUSES (Promos & Balance) -->
     <div id="bonuses" class="page">
         <h2>Бонусы</h2>
         
-        <!-- Promo -->
+        <div class="bonus-card">
+            <div>
+                <div style="font-size:12px; color:gray;">Ваш баланс</div>
+                <div style="font-size:10px; color:gray;">(Не влияет на уровень)</div>
+            </div>
+            <div class="bonus-val"><span id="bonus-balance">0</span> B</div>
+        </div>
+
         <div style="background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 20px;">
-            <h4 style="margin-top:0"><i class="fas fa-gift"></i> Промокод</h4>
+            <h4 style="margin-top:0"><i class="fas fa-ticket-alt"></i> Активировать код</h4>
             <div style="display:flex; gap:10px;">
-                <input type="text" id="user-promo-input" placeholder="Введите код" style="margin:0;">
+                <input type="text" id="user-promo-input" placeholder="Промокод" style="margin:0;">
                 <button onclick="activatePromo()" style="width:auto; padding:0 20px;">OK</button>
             </div>
+            <p style="font-size:10px; color:gray; margin-top:5px;">Бонусы можно копить для будущих покупок.</p>
         </div>
 
-        <!-- Referrals -->
         <div style="background: var(--card); padding: 15px; border-radius: 15px;">
             <h4 style="margin-top:0"><i class="fas fa-users"></i> Рефералы</h4>
-            <p style="font-size:12px;">Пригласите друга и получите 10% от его покупок в опыт.</p>
-            
-            <div style="background:#000; padding:10px; border-radius:8px; text-align:center; margin:10px 0;">
-                <div style="font-size:10px; color:gray">Ваш ID для друга</div>
-                <div style="font-size:20px; font-weight:bold; color:var(--green)" id="my-ref-id">...</div>
+            <p style="font-size:12px;">Пригласи друга: твой ID <b id="my-ref-id" style="color:var(--green)">...</b></p>
+            <div id="ref-input-area" style="display:flex; gap:10px; margin-top:10px;">
+                <input type="number" id="referrer-input" placeholder="ID друга" style="margin:0;">
+                <button onclick="setReferrer()" style="width:auto; padding:0 15px;">OK</button>
             </div>
-
-            <div id="ref-input-area">
-                <p style="font-size:12px; margin-bottom:5px;">Вас пригласили?</p>
-                <div style="display:flex; gap:10px;">
-                    <input type="number" id="referrer-input" placeholder="ID друга" style="margin:0;">
-                    <button onclick="setReferrer()" style="width:auto; padding:0 15px;">OK</button>
-                </div>
-            </div>
-            <p id="ref-status" style="color:var(--green); font-size:12px; display:none; margin-top:10px;"><i class="fas fa-check"></i> Вы приглашены пользователем <span id="ref-who"></span></p>
+            <p id="ref-status" style="color:var(--green); font-size:12px; display:none; margin-top:5px;">Вы приглашены: <span id="ref-who"></span></p>
         </div>
     </div>
 
-    <!-- 4. HISTORY -->
+    <!-- 3. TRANSACTIONS & HISTORY -->
     <div id="history" class="page">
-        <h2>История</h2>
-        <div id="history-list"></div>
+        <h3>История покупок</h3>
+        <div id="history-items-list"></div>
+        
+        <h3 style="margin-top:30px;">Транзакции</h3>
+        <p style="font-size:10px; color:gray;">История начислений и списаний</p>
+        <div id="history-trans-list"></div>
     </div>
     
-    <!-- 5. LEADERBOARD (Sidebar only) -->
-    <div id="leaderboard" class="page">
-        <h2>Топ мажоров</h2>
-        <div id="leaderboard-list"></div>
-    </div>
-
-    <!-- 6. ADMIN -->
+    <!-- 4. ADMIN -->
     <div id="admin" class="page">
         <h2 style="color: var(--red)">Админ Панель</h2>
         
@@ -178,10 +190,9 @@
         <div id="admin-controls" style="display:none;">
             <!-- Tabs -->
             <div class="admin-tabs">
-                <div class="admin-tab active" onclick="switchAdminTab('adm-tab-users', this)">Пользователи</div>
-                <div class="admin-tab" onclick="switchAdminTab('adm-tab-products', this)">Товары</div>
-                <div class="admin-tab" onclick="switchAdminTab('adm-tab-promos', this)">Промокоды</div>
-                <div class="admin-tab" onclick="switchAdminTab('adm-tab-news', this)">Новости</div>
+                <div class="admin-tab active" onclick="switchAdminTab('adm-tab-users', this)">Юзеры</div>
+                <div class="admin-tab" onclick="switchAdminTab('adm-tab-promos', this)">Промо</div>
+                <div class="admin-tab" onclick="switchAdminTab('adm-tab-theme', this)">Оформление</div>
             </div>
 
             <!-- TAB: USERS -->
@@ -190,11 +201,11 @@
                 <input type="text" id="adm-search-user">
                 <button onclick="adminFindUser()" style="background:#333; margin-bottom:15px;">Найти</button>
                 
-                <!-- Hidden Issue Form -->
+                <!-- Issue Form -->
                 <div id="issue-form" style="display:none; border-top:1px solid #333; padding-top:15px;">
-                    <h4>Выдать товар пользователю: <span id="issue-target-name" style="color:var(--red)"></span></h4>
+                    <h4>Выдать товар: <span id="issue-target-name" style="color:var(--red)"></span></h4>
                     <input type="text" id="adm-issue-item" placeholder="Название">
-                    <input type="number" id="adm-issue-price" placeholder="Цена">
+                    <input type="number" id="adm-issue-price" placeholder="Цена (влияет на уровень)">
                     <div style="display:flex; gap:10px;">
                         <input type="number" id="adm-issue-dur" placeholder="Срок">
                         <select id="adm-issue-unit">
@@ -206,39 +217,33 @@
                     </div>
                     <button onclick="adminGiveItem()">Выдать</button>
                 </div>
-
                 <div id="adm-user-items-list" style="margin-top:15px;"></div>
-            </div>
-
-            <!-- TAB: PRODUCTS -->
-            <div id="adm-tab-products" class="admin-section">
-                <h4>Добавить товар на витрину</h4>
-                <input type="text" id="prod-img" placeholder="Ссылка на фото (https://...)">
-                <input type="text" id="prod-name" placeholder="Название (Netflix)">
-                <input type="text" id="prod-price" placeholder="Цена (текст, напр '300₽ / мес')">
-                <button onclick="adminAddProduct()">Добавить</button>
-                
-                <h4>Активные товары:</h4>
-                <div id="adm-products-list"></div>
             </div>
 
             <!-- TAB: PROMOS -->
             <div id="adm-tab-promos" class="admin-section">
                 <h4>Создать промокод</h4>
-                <input type="text" id="promo-code" placeholder="Код (HELLO)">
-                <input type="number" id="promo-val" placeholder="Сумма (Руб/XP)">
+                <input type="text" id="promo-code" placeholder="Код (BONUS2026)">
+                <input type="number" id="promo-val" placeholder="Сумма Бонусов">
                 <input type="number" id="promo-hours" placeholder="Срок действия (часов)">
                 <button onclick="adminCreatePromo()">Создать</button>
-                
-                <h4>Активные коды:</h4>
-                <div id="adm-promos-list"></div>
+                <div id="adm-promos-list" style="margin-top:15px;"></div>
             </div>
             
-            <!-- TAB: NEWS -->
-            <div id="adm-tab-news" class="admin-section">
-                <h4>Текст баннера</h4>
-                <input type="text" id="adm-news-text">
-                <button onclick="adminSetNews()">Обновить</button>
+            <!-- TAB: THEME (SEASONS) -->
+            <div id="adm-tab-theme" class="admin-section">
+                <h4>Режим приложения</h4>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <button onclick="setTheme('default')" style="background:#333">Стандарт</button>
+                    <button onclick="setTheme('halloween')" style="background:#d35400">🎃 Хэллоуин</button>
+                    <button onclick="setTheme('newyear')" style="background:#3498db">❄️ Новый Год</button>
+                    <button onclick="setTheme('autumn')" style="background:#e67e22">🍂 Осень</button>
+                    <button onclick="setTheme('summer')" style="background:#f1c40f; color:black;">☀️ Лето</button>
+                    <button onclick="setTheme('spring')" style="background:#ff69b4">🌸 Весна</button>
+                </div>
+                <h4 style="margin-top:20px;">Текст новостей</h4>
+                <input type="text" id="adm-news-text" placeholder="Текст...">
+                <button onclick="adminSetNews()" style="background:#333">Обновить</button>
             </div>
         </div>
     </div>
@@ -247,17 +252,10 @@
     <div id="edit-modal" class="modal">
         <div class="modal-content">
             <h3>Редактирование</h3>
-            <input type="hidden" id="edit-user-id">
-            <input type="hidden" id="edit-item-id">
-            <input type="hidden" id="edit-old-price">
-            
-            <label>Название:</label>
-            <input type="text" id="edit-name">
-            <label>Цена:</label>
-            <input type="number" id="edit-price">
-            <label>Новая дата окончания:</label>
-            <input type="datetime-local" id="edit-date">
-            
+            <input type="hidden" id="edit-user-id"><input type="hidden" id="edit-item-id"><input type="hidden" id="edit-old-price">
+            <label>Название:</label><input type="text" id="edit-name">
+            <label>Цена:</label><input type="number" id="edit-price">
+            <label>Дата окончания:</label><input type="datetime-local" id="edit-date">
             <div style="display:flex; gap:10px; margin-top:10px;">
                 <button onclick="saveEditedItem()" style="background:var(--green)">Сохранить</button>
                 <button onclick="closeModal()" style="background:#444">Отмена</button>
@@ -267,29 +265,19 @@
 
     <!-- Bottom Nav -->
     <nav class="bottom-nav">
-        <div class="nav-item active" onclick="navTo('home')">
-            <i class="fas fa-home"></i> Главная
-        </div>
-        <div class="nav-item" onclick="navTo('catalog')">
-            <i class="fas fa-store"></i> Витрина
-        </div>
-        <div class="nav-item" onclick="navTo('bonuses')">
-            <i class="fas fa-gift"></i> Бонусы
-        </div>
-        <div class="nav-item" onclick="navTo('history')">
-            <i class="fas fa-shopping-bag"></i> История
-        </div>
+        <div class="nav-item active" onclick="navTo('home')"><i class="fas fa-home"></i> Главная</div>
+        <div class="nav-item" onclick="navTo('bonuses')"><i class="fas fa-gift"></i> Бонусы</div>
+        <div class="nav-item" onclick="navTo('history')"><i class="fas fa-history"></i> История</div>
     </nav>
 
     <!-- FIREBASE LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, increment, collection, query, where, getDocs, addDoc, deleteDoc, orderBy, limit } 
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, increment, collection, query, where, getDocs, deleteDoc } 
         from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-        // CONFIG
+        // === CONFIG ===
         const MY_ADMIN_PASSWORD = "5815";
-        const ADMIN_TG = "d2f4lt"; // Username for buying link
         
         const firebaseConfig = {
             apiKey: "AIzaSyDFrEbOwmtZlWlrPhImDlA0PE1tQKvYNAY",
@@ -309,10 +297,21 @@
         let myUsername = tg.initDataUnsafe?.user?.username || "unknown";
         if(myUsername) myUsername = myUsername.toLowerCase();
         
-        // --- CORE FUNCTIONS ---
+        // === CORE ===
 
         async function init() {
-            // User Data
+            // 1. Load Theme
+            const settingsSnap = await getDoc(doc(db, "settings", "general"));
+            if(settingsSnap.exists()) {
+                const s = settingsSnap.data();
+                if(s.theme) applyThemeLocal(s.theme);
+                if(s.news) {
+                    document.getElementById('news-block').style.display = 'block';
+                    document.getElementById('news-text').innerText = s.news;
+                }
+            }
+
+            // 2. Load User
             const userRef = doc(db, "users", myUserId.toString());
             const snap = await getDoc(userRef);
             if(snap.exists()) {
@@ -320,27 +319,17 @@
                 renderUI(snap.data());
             } else {
                 const newUser = { 
-                    username: myUsername, 
-                    name: tg.initDataUnsafe?.user?.first_name || "Guest",
-                    spent: 0, items: [] 
+                    username: myUsername, name: tg.initDataUnsafe?.user?.first_name || "Guest",
+                    spent: 0, items: [], bonusBalance: 0, transactions: []
                 };
                 await setDoc(userRef, newUser);
                 renderUI(newUser);
             }
             document.getElementById('my-ref-id').innerText = myUserId;
-            
-            // News
-            const news = await getDoc(doc(db, "settings", "general"));
-            if(news.exists() && news.data().text) {
-                document.getElementById('news-block').style.display = 'block';
-                document.getElementById('news-text').innerText = news.data().text;
-            }
-
-            loadCatalog();
         }
 
         function renderUI(data) {
-            // Level
+            // Level (xp = spent money on items)
             const RUB_PER_LEVEL = 100000;
             let spent = data.spent || 0;
             let level = Math.floor(spent / RUB_PER_LEVEL) + 1;
@@ -352,188 +341,180 @@
             document.getElementById('rub-current').innerText = (spent % RUB_PER_LEVEL).toLocaleString() + "₽";
             document.getElementById('stat-spent').innerText = spent.toLocaleString() + "₽";
 
-            // Referrer
+            // Bonuses
+            document.getElementById('bonus-balance').innerText = data.bonusBalance || 0;
             if(data.referrerId) {
                 document.getElementById('ref-input-area').style.display = 'none';
                 document.getElementById('ref-status').style.display = 'block';
                 document.getElementById('ref-who').innerText = data.referrerId;
             }
 
-            // History
-            const list = document.getElementById('history-list');
-            list.innerHTML = "";
+            // History Items
+            const listItems = document.getElementById('history-items-list');
+            listItems.innerHTML = "";
             let activeCount = 0;
-            
             if(data.items && data.items.length) {
                 const sorted = [...data.items].sort((a,b) => new Date(b.date) - new Date(a.date));
                 sorted.forEach(item => {
                     const expire = new Date(item.expiryDate);
-                    const now = new Date();
-                    const isExpired = now > expire;
+                    const isExpired = new Date() > expire;
                     if(!isExpired) activeCount++;
-                    
-                    list.innerHTML += `
+                    listItems.innerHTML += `
                     <div class="warranty-item ${isExpired ? 'expired' : ''}">
                         <div style="display:flex; justify-content:space-between; font-weight:bold;">
                             <span>${item.name}</span> <span>${item.price}₽</span>
                         </div>
-                        <div style="font-size:12px; margin:5px 0; color:${isExpired?'var(--red)':'var(--green)'}">
-                            ${isExpired ? 'Истекла' : 'Активна'}
-                        </div>
                         <div class="item-dates">
                             <span>Выдана: ${new Date(item.date).toLocaleDateString()}</span>
-                            <span>Истекает: ${expire.toLocaleDateString()} ${expire.getHours()}:00</span>
+                            <span>До: ${expire.toLocaleDateString()} ${expire.getHours()}:00</span>
                         </div>
                     </div>`;
                 });
-            } else list.innerHTML = "<p style='text-align:center;color:gray'>Пусто</p>";
-            
+            } else listItems.innerHTML = "<p style='text-align:center;color:gray'>Пусто</p>";
             document.getElementById('stat-count').innerText = activeCount;
+
+            // Transactions
+            const listTrans = document.getElementById('history-trans-list');
+            listTrans.innerHTML = "";
+            if(data.transactions && data.transactions.length) {
+                // Reverse to show newest first
+                [...data.transactions].reverse().forEach(t => {
+                    const sign = t.amount > 0 ? '+' : '';
+                    const css = t.amount > 0 ? 'trans-plus' : 'trans-minus';
+                    listTrans.innerHTML += `
+                    <div class="trans-item ${css}">
+                        <div>${t.reason}</div>
+                        <div style="font-weight:bold;">${sign}${t.amount}</div>
+                    </div>`;
+                });
+            } else listTrans.innerHTML = "<p style='text-align:center;color:gray'>Нет операций</p>";
         }
 
-        async function loadCatalog() {
-            const list = document.getElementById('catalog-list');
-            list.innerHTML = "";
-            const q = query(collection(db, "products"));
-            const snap = await getDocs(q);
+        // === THEME ENGINE ===
+        window.setTheme = async (mode) => {
+            await setDoc(doc(db, "settings", "general"), { theme: mode }, { merge: true });
+            alert("Тема изменена! Перезапустите приложение (или подождите обновления).");
+            applyThemeLocal(mode);
+        }
+
+        function applyThemeLocal(mode) {
+            document.body.className = `mode-${mode}`;
+            const c = document.getElementById('seasonal-container');
+            c.innerHTML = ""; // clear old
             
-            snap.forEach(doc => {
-                const p = doc.data();
-                const imgHTML = p.img ? `<img src="${p.img}" class="product-img">` : `<div class="product-img" style="display:flex;align-items:center;justify-content:center"><i class="fas fa-box fa-2x"></i></div>`;
-                
-                list.innerHTML += `
-                <div class="product-card">
-                    ${imgHTML}
-                    <div class="product-info">
-                        <div class="product-title">${p.name}</div>
-                        <div class="product-price">${p.price}</div>
-                        <button class="btn-buy" onclick="buyItem('${p.name}')">Купить</button>
-                    </div>
-                </div>`;
-            });
+            if(mode === 'newyear') {
+                for(let i=0; i<30; i++) {
+                    const el = document.createElement('div');
+                    el.className = 'snow-flake';
+                    el.innerHTML = '❄';
+                    el.style.left = Math.random()*100 + 'vw';
+                    el.style.animationDuration = (Math.random()*5 + 5) + 's';
+                    el.style.fontSize = (Math.random()*10 + 10) + 'px';
+                    c.appendChild(el);
+                }
+            } else if(mode === 'halloween') {
+                const el = document.createElement('div');
+                el.className = 'ghost';
+                el.innerHTML = '👻';
+                c.appendChild(el);
+            } else if(mode === 'autumn') {
+                for(let i=0; i<15; i++) {
+                    const el = document.createElement('div');
+                    el.className = 'leaf';
+                    el.innerHTML = '🍂';
+                    el.style.left = Math.random()*100 + 'vw';
+                    el.style.animationDuration = (Math.random()*5 + 5) + 's';
+                    c.appendChild(el);
+                }
+            } else if(mode === 'summer') {
+                const el = document.createElement('div');
+                el.className = 'sun-flare';
+                c.appendChild(el);
+            } else if(mode === 'spring') {
+                for(let i=0; i<20; i++) {
+                    const el = document.createElement('div');
+                    el.className = 'flower';
+                    el.innerHTML = '🌸';
+                    el.style.left = Math.random()*100 + 'vw';
+                    el.style.animationDuration = (Math.random()*8 + 4) + 's';
+                    c.appendChild(el);
+                }
+            }
         }
 
-        // --- USER ACTIONS ---
-
-        window.buyItem = (name) => {
-            tg.openTelegramLink(`https://t.me/${ADMIN_TG}?text=Купить ${name} (ID: ${myUserId})`);
-        }
-
+        // === USER ACTIONS ===
         window.activatePromo = async () => {
             const code = document.getElementById('user-promo-input').value.trim().toUpperCase();
             if(!code) return;
-            try {
-                const ref = doc(db, "promocodes", code);
-                const snap = await getDoc(ref);
-                if(!snap.exists()) return alert("Неверный код");
-                
-                const p = snap.data();
-                if(new Date() > new Date(p.expiresAt)) return alert("Код истек");
-                if(p.users && p.users.includes(myUserId.toString())) return alert("Уже активирован");
+            const ref = doc(db, "promocodes", code);
+            const snap = await getDoc(ref);
+            if(!snap.exists()) return alert("Код не найден");
+            const p = snap.data();
+            if(new Date() > new Date(p.expiresAt)) return alert("Истек");
+            if(p.users && p.users.includes(myUserId.toString())) return alert("Уже использован");
 
-                await updateDoc(ref, { users: arrayUnion(myUserId.toString()) });
-                await updateDoc(doc(db, "users", myUserId.toString()), { spent: increment(p.value) });
-                alert(`+${p.value}₽ начислено!`);
-                location.reload();
-            } catch(e) { console.error(e); }
+            // Add Bonus + Transaction
+            const trans = { amount: p.value, reason: `Промокод ${code}`, date: new Date().toISOString() };
+            
+            await updateDoc(ref, { users: arrayUnion(myUserId.toString()) });
+            await updateDoc(doc(db, "users", myUserId.toString()), { 
+                bonusBalance: increment(p.value),
+                transactions: arrayUnion(trans)
+            });
+            alert("Бонусы начислены!");
+            location.reload();
         }
 
         window.setReferrer = async () => {
             const id = document.getElementById('referrer-input').value;
-            if(id == myUserId) return alert("Нельзя пригласить себя");
-            
-            const refUser = await getDoc(doc(db, "users", id.toString()));
-            if(!refUser.exists()) return alert("ID не найден");
-            
+            if(id == myUserId) return alert("Нельзя себя");
+            const check = await getDoc(doc(db, "users", id.toString()));
+            if(!check.exists()) return alert("Нет такого ID");
             await updateDoc(doc(db, "users", myUserId.toString()), { referrerId: id.toString() });
-            alert("Сохранено!");
+            alert("ОК");
             location.reload();
         }
 
-        // --- ADMIN PANEL ---
-
+        // === ADMIN ACTIONS ===
         window.adminLogin = () => {
             if(document.getElementById('adm-password-input').value === MY_ADMIN_PASSWORD) {
                 document.getElementById('admin-login').style.display = 'none';
                 document.getElementById('admin-controls').style.display = 'block';
-                loadAdminData(); // Load promos/products
+                loadAdminPromos();
             } else alert("Error");
         }
 
-        window.switchAdminTab = (tabId, el) => {
+        window.switchAdminTab = (id, el) => {
             document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
+            document.getElementById(id).classList.add('active');
             document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
             el.classList.add('active');
         }
 
-        window.loadAdminData = async () => {
-            // Products
-            const pDiv = document.getElementById('adm-products-list');
-            pDiv.innerHTML = "";
-            const pSnap = await getDocs(collection(db, "products"));
-            pSnap.forEach(d => {
-                pDiv.innerHTML += `
-                <div class="list-item-row">
-                    <span>${d.data().name}</span>
-                    <div class="btn-icon btn-red" onclick="admDelProduct('${d.id}')"><i class="fas fa-trash"></i></div>
-                </div>`;
-            });
-
-            // Promos
-            const prDiv = document.getElementById('adm-promos-list');
-            prDiv.innerHTML = "";
-            const prSnap = await getDocs(collection(db, "promocodes"));
-            prSnap.forEach(d => {
-                const exp = new Date(d.data().expiresAt);
-                const isAlive = new Date() < exp;
-                prDiv.innerHTML += `
-                <div class="list-item-row">
-                    <div>
-                        <b>${d.id}</b> (${d.data().value}₽)<br>
-                        <span style="color:${isAlive?'lime':'red'}">${isAlive?'Активен':'Истек'}</span>
-                    </div>
-                    <div class="btn-icon btn-red" onclick="admDelPromo('${d.id}')"><i class="fas fa-trash"></i></div>
-                </div>`;
-            });
-        }
-
-        // 1. User Management (Edit/Delete)
-        let foundUserId = null; // store current searched user ID
-
+        // Users
+        let foundUserId = null;
         window.adminFindUser = async () => {
             const uname = document.getElementById('adm-search-user').value.trim().toLowerCase().replace("@","");
             const q = query(collection(db, "users"), where("username", "==", uname));
             const snap = await getDocs(q);
             const list = document.getElementById('adm-user-items-list');
             
-            if(snap.empty) {
-                list.innerHTML = "Не найден";
-                document.getElementById('issue-form').style.display = 'none';
-                return;
-            }
+            if(snap.empty) { list.innerHTML="Нет"; document.getElementById('issue-form').style.display='none'; return; }
 
-            const docSnap = snap.docs[0];
-            const u = docSnap.data();
-            foundUserId = docSnap.id; // Save globally for issue/edit
-
-            document.getElementById('issue-form').style.display = 'block';
-            document.getElementById('issue-target-name').innerText = "@" + u.username;
-
+            const u = snap.docs[0].data();
+            foundUserId = snap.docs[0].id;
+            document.getElementById('issue-form').style.display='block';
+            document.getElementById('issue-target-name').innerText = "@"+u.username;
+            
             list.innerHTML = "";
             if(u.items) {
-                u.items.forEach(item => {
-                    const exp = new Date(item.expiryDate).toLocaleDateString();
-                    // Pass item data to edit function safely by ID
+                u.items.forEach(i => {
                     list.innerHTML += `
                     <div class="list-item-row">
-                        <div>
-                            <b>${item.name}</b> (${item.price}₽)<br>
-                            <span style="font-size:10px; color:gray">До: ${exp}</span>
-                        </div>
+                        <div><b>${i.name}</b> (${i.price}₽)</div>
                         <div style="display:flex">
-                            <div class="btn-icon" onclick="openEditModal('${foundUserId}', '${item.id}')"><i class="fas fa-pen"></i></div>
-                            <div class="btn-icon btn-red" onclick="admDelItem('${foundUserId}', '${item.id}', ${item.price})"><i class="fas fa-trash"></i></div>
+                            <div class="btn-icon" onclick="openEditModal('${foundUserId}','${i.id}')"><i class="fas fa-pen"></i></div>
+                            <div class="btn-icon btn-red" onclick="admDelItem('${foundUserId}','${i.id}',${i.price})"><i class="fas fa-trash"></i></div>
                         </div>
                     </div>`;
                 });
@@ -547,182 +528,109 @@
             const dur = Number(document.getElementById('adm-issue-dur').value);
             const unit = document.getElementById('adm-issue-unit').value;
 
-            let date = new Date();
-            if(unit === 'hours') date.setHours(date.getHours() + dur);
-            if(unit === 'days') date.setDate(date.getDate() + dur);
-            if(unit === 'months') date.setMonth(date.getMonth() + dur);
-            if(unit === 'years') date.setFullYear(date.getFullYear() + dur);
+            let d = new Date();
+            if(unit==='hours') d.setHours(d.getHours()+dur);
+            if(unit==='days') d.setDate(d.getDate()+dur);
+            if(unit==='months') d.setMonth(d.getMonth()+dur);
+            if(unit==='years') d.setFullYear(d.getFullYear()+dur);
 
-            const newItem = {
-                id: Date.now().toString() + Math.random().toString(36).substr(2,5),
-                name, price,
-                date: new Date().toISOString(),
-                expiryDate: date.toISOString()
-            };
+            const newItem = { id: Date.now().toString(), name, price, date: new Date().toISOString(), expiryDate: d.toISOString() };
+            // Log Transaction
+            const trans = { amount: price, reason: `Покупка: ${name}`, date: new Date().toISOString() }; // Not affecting balance here, just logging price as value of purchase
 
             await updateDoc(doc(db, "users", foundUserId), {
                 items: arrayUnion(newItem),
-                spent: increment(price)
+                spent: increment(price),
+                transactions: arrayUnion(trans)
             });
-            
-            // Check Ref Bonus
-            const uData = (await getDoc(doc(db, "users", foundUserId))).data();
-            if(uData.referrerId) {
-                const bonus = Math.floor(price * 0.1);
-                // Simple check if ref exists
-                try { await updateDoc(doc(db, "users", uData.referrerId), { spent: increment(bonus) }); } catch(e){}
-            }
-
             alert("Выдано");
-            adminFindUser(); // Refresh list
-        }
-
-        // EDIT LOGIC
-        window.openEditModal = async (uid, itemId) => {
-            const snap = await getDoc(doc(db, "users", uid));
-            const item = snap.data().items.find(i => i.id === itemId);
-            
-            document.getElementById('edit-user-id').value = uid;
-            document.getElementById('edit-item-id').value = itemId;
-            document.getElementById('edit-old-price').value = item.price;
-            document.getElementById('edit-name').value = item.name;
-            document.getElementById('edit-price').value = item.price;
-            // Format date for input datetime-local (requires YYYY-MM-DDTHH:MM)
-            const d = new Date(item.expiryDate);
-            d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-            document.getElementById('edit-date').value = d.toISOString().slice(0,16);
-            
-            document.getElementById('edit-modal').style.display = 'flex';
-        }
-
-        window.saveEditedItem = async () => {
-            const uid = document.getElementById('edit-user-id').value;
-            const iid = document.getElementById('edit-item-id').value;
-            const oldPrice = Number(document.getElementById('edit-old-price').value);
-            
-            const newName = document.getElementById('edit-name').value;
-            const newPrice = Number(document.getElementById('edit-price').value);
-            const newDate = new Date(document.getElementById('edit-date').value).toISOString();
-
-            const userRef = doc(db, "users", uid);
-            const snap = await getDoc(userRef);
-            let items = snap.data().items;
-            
-            // Find and update in array
-            const idx = items.findIndex(x => x.id === iid);
-            if(idx > -1) {
-                items[idx].name = newName;
-                items[idx].price = newPrice;
-                items[idx].expiryDate = newDate;
-                
-                // Calc price diff for stats
-                const diff = newPrice - oldPrice;
-                
-                await updateDoc(userRef, { items: items, spent: increment(diff) });
-                alert("Сохранено");
-                closeModal();
-                adminFindUser(); // Refresh UI
-            }
-        }
-        window.closeModal = () => document.getElementById('edit-modal').style.display = 'none';
-
-        window.admDelItem = async (uid, iid, price) => {
-            if(!confirm("Удалить?")) return;
-            const userRef = doc(db, "users", uid);
-            const snap = await getDoc(userRef);
-            const items = snap.data().items.filter(x => x.id !== iid);
-            await updateDoc(userRef, { items: items, spent: increment(-price) });
             adminFindUser();
         }
 
-        // 2. Product Management
-        window.adminAddProduct = async () => {
-            const name = document.getElementById('prod-name').value;
-            const price = document.getElementById('prod-price').value;
-            const img = document.getElementById('prod-img').value;
-            if(!name) return;
-            await addDoc(collection(db, "products"), { name, price, img });
-            loadAdminData();
-            document.getElementById('prod-name').value = "";
-        }
-        window.admDelProduct = async (id) => {
-            if(confirm("Удалить товар?")) {
-                await deleteDoc(doc(db, "products", id));
-                loadAdminData();
-            }
-        }
-
-        // 3. Promo Management
-        window.adminCreatePromo = async () => {
-            const code = document.getElementById('promo-code').value.toUpperCase();
-            const val = Number(document.getElementById('promo-val').value);
-            const hours = Number(document.getElementById('promo-hours').value);
-            
-            if(!code || !val || !hours) return;
-            
-            let exp = new Date();
-            exp.setHours(exp.getHours() + hours);
-
-            await setDoc(doc(db, "promocodes", code), {
-                value: val,
-                expiresAt: exp.toISOString(),
-                users: []
+        // Promos
+        window.loadAdminPromos = async () => {
+            const d = document.getElementById('adm-promos-list');
+            d.innerHTML = "";
+            const s = await getDocs(collection(db, "promocodes"));
+            s.forEach(doc => {
+                 d.innerHTML += `<div class="list-item-row"><span>${doc.id} (${doc.data().value}B)</span><div class="btn-icon btn-red" onclick="admDelPromo('${doc.id}')"><i class="fas fa-trash"></i></div></div>`;
             });
-            loadAdminData();
         }
-        window.admDelPromo = async (id) => {
-            if(confirm("Удалить промокод?")) {
-                await deleteDoc(doc(db, "promocodes", id));
-                loadAdminData();
-            }
+        window.adminCreatePromo = async () => {
+            const c = document.getElementById('promo-code').value.toUpperCase();
+            const v = Number(document.getElementById('promo-val').value);
+            const h = Number(document.getElementById('promo-hours').value);
+            let exp = new Date(); exp.setHours(exp.getHours()+h);
+            await setDoc(doc(db, "promocodes", c), { value: v, expiresAt: exp.toISOString(), users: [] });
+            loadAdminPromos();
         }
+        window.admDelPromo = async (id) => { if(confirm("Del?")) { await deleteDoc(doc(db,"promocodes",id)); loadAdminPromos(); }}
         
-        // 4. News
         window.adminSetNews = async () => {
             const t = document.getElementById('adm-news-text').value;
-            await setDoc(doc(db, "settings", "general"), { text: t }, { merge: true });
-            alert("Обновлено");
+            await setDoc(doc(db,"settings","general"),{news: t}, {merge:true});
+            alert("Saved");
         }
 
-        // Nav
+        // Edit/Delete Item
+        window.openEditModal = async (uid, iid) => {
+            const s = await getDoc(doc(db, "users", uid));
+            const i = s.data().items.find(x => x.id === iid);
+            document.getElementById('edit-user-id').value = uid;
+            document.getElementById('edit-item-id').value = iid;
+            document.getElementById('edit-old-price').value = i.price;
+            document.getElementById('edit-name').value = i.name;
+            document.getElementById('edit-price').value = i.price;
+            const dt = new Date(i.expiryDate);
+            dt.setMinutes(dt.getMinutes() - dt.getTimezoneOffset());
+            document.getElementById('edit-date').value = dt.toISOString().slice(0,16);
+            document.getElementById('edit-modal').style.display = 'flex';
+        }
+        window.saveEditedItem = async () => {
+            const uid = document.getElementById('edit-user-id').value;
+            const iid = document.getElementById('edit-item-id').value;
+            const np = Number(document.getElementById('edit-price').value);
+            const op = Number(document.getElementById('edit-old-price').value);
+            const nn = document.getElementById('edit-name').value;
+            const nd = new Date(document.getElementById('edit-date').value).toISOString();
+            
+            const r = doc(db, "users", uid);
+            const s = await getDoc(r);
+            let it = s.data().items;
+            const idx = it.findIndex(x => x.id === iid);
+            if(idx > -1) {
+                it[idx].name = nn; it[idx].price = np; it[idx].expiryDate = nd;
+                await updateDoc(r, { items: it, spent: increment(np - op) });
+                alert("Saved"); document.getElementById('edit-modal').style.display='none'; adminFindUser();
+            }
+        }
+        window.closeModal = () => document.getElementById('edit-modal').style.display='none';
+        window.admDelItem = async (uid, iid, p) => {
+            if(confirm("Del?")) {
+                const r = doc(db, "users", uid);
+                const s = await getDoc(r);
+                const it = s.data().items.filter(x => x.id !== iid);
+                // Add transaction record about deletion (refund)
+                const trans = { amount: -p, reason: "Возврат/Удаление", date: new Date().toISOString() };
+                await updateDoc(r, { items: it, spent: increment(-p), transactions: arrayUnion(trans) });
+                adminFindUser();
+            }
+        }
+
+        // Navigation
         window.navTo = (id) => {
-            // Active Tab
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            
-            // Active Button Color
-            document.querySelectorAll('.nav-item').forEach(el => {
-                if(el.getAttribute('onclick').includes(id)) el.classList.add('active');
-                else el.classList.remove('active');
+            document.querySelectorAll('.nav-item').forEach(e => {
+                if(e.getAttribute('onclick').includes(id)) e.classList.add('active'); else e.classList.remove('active');
             });
-
             document.getElementById('sidebar').classList.remove('active');
-            document.querySelector('.sidebar-overlay').style.display = 'none';
-
-            if(id === 'leaderboard') loadLeaderboard();
+            document.querySelector('.sidebar-overlay').style.display='none';
         }
-        
         window.toggleSidebar = () => {
             const sb = document.getElementById('sidebar');
             sb.classList.toggle('active');
             document.querySelector('.sidebar-overlay').style.display = sb.classList.contains('active')?'block':'none';
-        }
-
-        // Leaderboard logic
-        window.loadLeaderboard = async () => {
-            const list = document.getElementById('leaderboard-list');
-            list.innerHTML = "Загрузка...";
-            try {
-                const q = query(collection(db, "users"), orderBy("spent", "desc"), limit(10));
-                const snap = await getDocs(q);
-                list.innerHTML = "";
-                let i = 1;
-                snap.forEach(d => {
-                     const u = d.data();
-                     list.innerHTML += `<div style="background:var(--card); padding:10px; margin-bottom:5px; border-radius:10px; display:flex; justify-content:space-between;"><span>#${i} ${u.name}</span><span style="color:gold">${u.spent}₽</span></div>`;
-                     i++;
-                });
-            } catch(e) { list.innerHTML = "Ошибка индекса (см консоль)"; console.log(e); }
         }
 
         init();
